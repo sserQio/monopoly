@@ -1,0 +1,20 @@
+
+TABELLONE
+Matrice di stringhe (con generazione random delle caselle, vedi consegna).
+Oltre a eventuali caratteri di identazione: il primo carattere è sempre il tipo di casella, 
+dal secondo bisogna gestire la presenza di casa/albergo o giocatori.
+Funzione di stampa
+
+PLAYER
+Classe virtuale pura, con due derivate: CPUPlayer e HumanPlayer. Nella classe base vi sono le politiche di movimento, nelle
+derivate i relativi tiri dei dati e/o ovverride necessari. Si salva nei player la loro posizione: ad ogni movimento si passa per reference
+la mappa su cui deve avvenire.
+
+
+
+//I compiti sono solo organizzativi (così non rischiamo di "sprecare" tempo lavorando sulle stesse cose senza saperlo)
+Classe base player: mattia + impostazone tester
+
+Derivate player: Albi
+
+Tabellone: ser
