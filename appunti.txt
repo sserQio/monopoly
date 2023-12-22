@@ -4,14 +4,14 @@ Matrice di stringhe (con generazione random delle caselle, vedi consegna).
 Oltre a eventuali caratteri di identazione: il primo carattere è sempre il tipo di casella, 
 dal secondo bisogna gestire la presenza di casa/albergo o giocatori.
 Funzione di stampa
+Possiede una lista di 4 player: è il tabellone che gestisce il susseguirsi dei turni chiamando le funzioni move 
+del player a cui tocca.
 
 PLAYER
 Classe base HumanPLayer, derivata CPUPlayer. (Non saprei cosa definire come virtuale puro quindi farei così)
 In Player vi sono il lancio del dado, il movimento nel tabellone e le possibili azioni del giocatore umano.
 In CPUPlayer l'override delle possibili azioni per includere la casualità del 25%
-Una volta avvenuto il movimento, il player stesso controlla in che casella del tabellone si trova
-e agisce di conseguenza (dobbiamo pensare a come strutturare quest'aspetto, ad esempio: mi muovo di x caselle,
-verifico che mi trovo nella casella y + x. Tramite delle funzioni di maze devo poter capire )
+
 
 
 
