@@ -6,15 +6,18 @@ dal secondo bisogna gestire la presenza di casa/albergo o giocatori.
 Funzione di stampa
 
 PLAYER
-Classe virtuale pura, con due derivate: CPUPlayer e HumanPlayer. Nella classe base vi sono le politiche di movimento, nelle
-derivate i relativi tiri dei dati e/o ovverride necessari. Si salva nei player la loro posizione: ad ogni movimento si passa per reference
-la mappa su cui deve avvenire.
+Classe base HumanPLayer, derivata CPUPlayer. (Non saprei cosa definire come virtuale puro quindi farei così)
+In Player vi sono il lancio del dado, il movimento nel tabellone e le possibili azioni del giocatore umano.
+In CPUPlayer l'override delle possibili azioni per includere la casualità del 25%
+Una volta avvenuto il movimento, il player stesso controlla in che casella del tabellone si trova
+e agisce di conseguenza (dobbiamo pensare a come strutturare quest'aspetto, ad esempio: mi muovo di x caselle,
+verifico che mi trovo nella casella y + x. Tramite delle funzioni di maze devo poter capire )
 
 
 
 //I compiti sono solo organizzativi (così non rischiamo di "sprecare" tempo lavorando sulle stesse cose senza saperlo)
 Classe base player: mattia + impostazone tester
 
-Derivate player: Albi
+Derivata CPU player: Albi
 
 Tabellone: ser
