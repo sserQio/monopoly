@@ -2,14 +2,22 @@
 #define PLAYER_H
 
 #include <iostream>
-class Player{
-    int budget;
-    int* pos;
+#include <cstdlib> 
+#include <ctime>
 
-    std::vector<std::string> houses; //lista delle coordinate delle case in possesso
-    std::vector<std::string> hotels;
-    std::vector<std::string> lands;
-    //void move(tabellone per reference); effettua il movimento e chiama check_box
+class Board;
+
+class Player{
+
+    protected: 
+        //Da spostare in Board? Ottimizzare per tabelloni di altre dimensioni?
+        int budget;
+        int pos[2];
+
+        std::vector<std::string> houses; //lista delle coordinate delle case in possesso
+        std::vector<std::string> hotels;
+        std::vector<std::string> lands;
+        void move(Board& board, int times); 
 
     public:
         int throw_dice();
@@ -20,9 +28,9 @@ class Player{
         virtual void buy_house (int cost);
         virtual void buy_hotel(int cost);
 
-        std::vector<std::string> get_houses(); 
-        std::vector<std::string> get_hotels();
-        std::vector<std::string> get_lands();
+        const std::vector<std::string>& get_houses(); //meglio restituire una copia modificabile?
+        const std::vector<std::string>& get_hotels();
+        const std::vector<std::string>& get_lands();
 
 };
 
