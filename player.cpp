@@ -71,7 +71,7 @@ std::string Player::get_name(){
 }
 
 void Player::set_name(std::string word){
-    name = name; // dovrebbe essere name = word? <---------------------------------------------------
+    name = word; // dovrebbe essere name = word? <---------------------------------------------------
 }
 
 int Player::get_budget(){
