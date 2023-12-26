@@ -6,6 +6,8 @@ class Board{
 
     const int HEIGHT = 8;
     const int WIDTH = 8;
+    
+    const int start_value = 20;
 
     std::vector<std::vector<std::string> > board; 
 
@@ -20,6 +22,7 @@ class Board{
 
         int get_height();
         int get_width();
+        int start_increment();
 
         int whose_property(int* coordinates); 
 

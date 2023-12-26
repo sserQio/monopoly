@@ -15,6 +15,7 @@ void Player::move(Board& b, int n){
     while(pos[1] == 0 && pos[0] >= 0 && n>0){
         n--;
         pos[0]-=1;
+        if (pos[0] == 0)    budget+=b.start_increment();  //sono passato per il via
     }
     while(pos[1] == b.get_width() -1 && pos[0] < b.get_height() && n>0){ //pos[0] partirà al massimo da HEIGHT -1
         n--;
@@ -26,6 +27,7 @@ void Player::move(Board& b, int n){
     }
     while(pos[0] == 0 && pos[1] < b.get_width() -1 && n>0){
         n--;
+        if (pos[1] == 0)    budget+=b.start_increment(); //sono passato per il via
         pos[1]+=1;
     }
 
