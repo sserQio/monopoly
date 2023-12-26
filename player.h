@@ -10,7 +10,7 @@ class Board;
 class Player{
 
     protected: 
-        //Da spostare in Board? Ottimizzare per tabelloni di altre dimensioni?
+        std::string name;
         int budget;
         int pos[2];
 
@@ -20,9 +20,14 @@ class Player{
         void move(Board& board, int times); 
 
     public:
+        Player() : budget(100), name("Player"){}; 
+
         int throw_dice();
         int get_budget();
         int* get_pos();
+
+        std::string get_name();
+        void set_name(std::string name);
 
         virtual void buy_land(int cost);
         virtual void buy_house (int cost);

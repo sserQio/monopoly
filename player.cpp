@@ -3,6 +3,7 @@
 
 //   ---  COSTRUTTORI  ---
 
+
 //   ---  FUNZIONI DI GIOCO  ---
 
 int Player::throw_dice(){
@@ -64,6 +65,14 @@ void Player::buy_house(int c){ //aggiungere richiesta input o creare altra deriv
 
 
 //   ---  FUNZIONI DI ACCESSO  ---
+
+std::string Player::get_name(){
+    return name;
+}
+
+void Player::set_name(std::string word){
+    name = name;
+}
 
 int Player::get_budget(){
     return budget;
