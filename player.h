@@ -16,7 +16,6 @@ class Player{
         std::vector<std::string> houses; //lista delle coordinate delle case in possesso
         std::vector<std::string> hotels;
         std::vector<std::string> lands;
-        void move(Board& board, int times); 
 
     public:
         Player() : budget(100), name("Player"){}; 
@@ -27,6 +26,8 @@ class Player{
 
         std::string get_name();
         void set_name(std::string name);
+
+        void move(Board& board, int times); 
 
         virtual bool buy_land(int cost);
         virtual bool buy_house (int cost);

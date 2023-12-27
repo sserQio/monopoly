@@ -1,30 +1,39 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <random>
+class Player;
 
 class Board{
     
     const int HEIGHT = 8;
     const int WIDTH = 8;
     const int players_number = 4;
+    int turn;
+
+    //costi e spese
+    const int through_start = 20;
+
+    const int economic_land = 6, standard_land = 10, luxurious_land = 20;
+    const int economic_house = 3, standard_house = 5, luxurious_house = 10;
+    const int economic_hotel = 3, standard_hotel = 5, luxurious_hotel = 10;
+    const int lodging_Ehouse = 2, lodgingShouse = 4, lodging_Lhouse = 7;
+    const int lodging_Ehotel = 4, lodgingShotel = 8, lodgingLhotel = 14;
 
     std::ofstream output_file;
     std::string file_name;
 
-    const int through_start = 20;
 
-    std::vector<std::vector<std::string>> board = std::vector<std::vector<std::string>>(HEIGHT, std::vector<std::string>(WIDTH));
+    std::vector<std::vector<std::string> > board = std::vector<std::vector<std::string> >(HEIGHT, std::vector<std::string>(WIDTH));
 
     //modificare per supportare tabelloni di qualsiasi dimensioni.
-    std::vector<char> letters {'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L'};
+    //std::vector<char> letters {'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L'};
 
     std::vector<Player> players = std::vector<Player>(players_number);
 
-    bool compare_throws(std::string s1, std::string s2); 
+    static bool compare_throws(const std::string& s1, const std::string& s2); 
 
     //verifica se la posizione corrente (del giocatore che ha effettuato un movimento) appartiene 
     //a qualcuno, e restituisce il numero del giocatore (in riferimento all'array di giocatori)
@@ -46,42 +55,22 @@ class Board{
         std::vector<char> get_letters();
         void fill_board();
 
+        void next(); 
+
         void p_order();
 
         void print_board();
 
         int whose_property(int* coordinates); 
 
+        enum class rows {A = 0, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
+
 };
 
 //valutare la convenienza o meno
-enum class columns {A = 0, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
 
-std::string to_string(columns c){
-    switch(c){
-        case columns::A : return "A";
-        case columns::B : return "B";
-        case columns::C : return "C";
-        case columns::D : return "D";
-        case columns::E : return "E";
-        case columns::F : return "F";
-        case columns::G : return "G";
-        case columns::H : return "H";
-        case columns::I : return "I";
-        case columns::L : return "L";
-        case columns::M : return "M";
-        case columns::N : return "N";
-        case columns::O : return "O";
-        case columns::P : return "P";
-        case columns::Q : return "Q";
-        case columns::R : return "R";
-        case columns::S : return "S";
-        case columns::T : return "T";
-        case columns::U : return "U";
-        case columns::V : return "V";
-        case columns::Z : return "Z";
-    }
-};
+
+std::string to_string(Board::rows c);
 
 // 
 
