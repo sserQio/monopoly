@@ -9,9 +9,9 @@ class CPUPlayer: public Player{
         CPUPlayer() : Player(){};
         CPUPlayer(std::string name) : Player(){     name = "CPU"+name;};
 
-        virtual void buy_land(int cost);
-        virtual void buy_house (int cost);
-        virtual void buy_hotel(int cost);
+        virtual bool buy_land(int cost);
+        virtual bool buy_house (int cost);
+        virtual bool buy_hotel(int cost);
 
 };
 

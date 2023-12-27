@@ -34,34 +34,29 @@ void Player::move(Board& b, int n){
     if(n > 0)   move(b, n);
 }
 
-void Player::buy_land(int c){ //aggiungere richiesta input o creare altra derivata HumanPlayer
-    if (budget < c){
-        std::cout <<"Il giocatore non possiede finanze sufficienti per l'acquisto" <<"\n";
-        return;
-    }
+bool Player::buy_land(int c){ 
+    if (budget < c)     return false;
     //altrimenti
     budget -= c;
     lands.push_back(to_string(columns(pos[0])) += (char)pos[1]);
+    return true;
 }
 
-void Player::buy_house(int c){ //aggiungere richiesta input o creare altra derivata HumanPlayer
-    if (budget < c){
-        std::cout <<"Il giocatore non possiede finanze sufficienti per l'acquisto" <<"\n";
-        return;
-    }
+bool Player::buy_house(int c){ 
+    if (budget < c)     return false;
+
     budget -= c;
     houses.push_back(to_string(columns(pos[0])) += (char)pos[1]);
+    return true;
     //rimuovere dai terreni? decidere politiche di stampa proprietà
 }
 
-void Player::buy_house(int c){ //aggiungere richiesta input o creare altra derivata HumanPlayer
+bool Player::buy_hotel(int c){
+    if (budget < c)     return false;
 
-    if (budget < c){
-        std::cout <<"Il giocatore non possiede finanze sufficienti per l'acquisto" <<"\n";
-        return;
-    }
     budget -= c;
     hotels.push_back(to_string(columns(pos[0])) += (char)pos[1]);
+    return true;
     //rimuovere dalle case? decidere politiche di stampa proprietà
 }
 

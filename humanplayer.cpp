@@ -4,6 +4,8 @@
 
 bool HumanPlayer::ask_input(int cost){
 
+    //Non stampo su file perché è la diretta interazione con l'utente, che avviene da terminale
+    //Verrà stampata su file soltanto la decisione presa
     std::cout << "Il budget attuale è di " << budget << " fiorini." <<"\n";
     std::cout << "Si vuole procedere all'acquisto per " << cost <<" fiorini? [y/n] ";
     char c;
@@ -21,6 +23,6 @@ bool HumanPlayer::ask_input(int cost){
 
 //   ---  OVERRIDE VIRTUAL FUNCTIONS  ---
 
-void HumanPlayer::buy_land(int cost){   if (ask_input(cost))    Player::buy_land(cost);}
-void HumanPlayer::buy_house(int cost){  if (ask_input(cost))    Player::buy_land(cost);}
-void HumanPlayer::buy_hotel(int cost){  if (ask_input(cost))    Player::buy_hotel(cost);}
+bool HumanPlayer::buy_land(int cost){   if (ask_input(cost))    return Player::buy_land(cost);}
+bool HumanPlayer::buy_house(int cost){  if (ask_input(cost))    return Player::buy_land(cost);}
+bool HumanPlayer::buy_hotel(int cost){  if (ask_input(cost))    return Player::buy_hotel(cost);}

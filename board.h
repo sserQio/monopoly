@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <random>
 
@@ -10,6 +11,9 @@ class Board{
     const int HEIGHT = 8;
     const int WIDTH = 8;
     const int players_number = 4;
+
+    std::ofstream output_file;
+    std::string file_name;
 
     const int through_start = 20;
 
@@ -32,6 +36,8 @@ class Board{
 
         Board(); 
         Board(Player p1, Player p2, Player p3, Player p4);
+
+        void set_output_file(std::string file_name);
     
         int get_height();
         int get_width();
