@@ -10,9 +10,12 @@ class Board{
     const int HEIGHT = 8;
     const int WIDTH = 8;
     const int players_number = 4;
-    const int start_value = 20;
+
+    const int through_start = 20;
 
     std::vector<std::vector<std::string>> board = std::vector<std::vector<std::string>>(HEIGHT, std::vector<std::string>(WIDTH));
+
+    //modificare per supportare tabelloni di qualsiasi dimensioni.
     std::vector<char> letters {'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L'};
 
     std::vector<Player> players = std::vector<Player>(players_number);
@@ -45,6 +48,7 @@ class Board{
 
 };
 
+//valutare la convenienza o meno
 enum class columns {A = 0, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
 
 std::string to_string(columns c){

@@ -8,7 +8,6 @@
 class Board;
 
 class Player{
-
     protected: 
         std::string name;
         int budget;
