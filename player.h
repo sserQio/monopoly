@@ -33,6 +33,8 @@ class Player{
         virtual bool buy_house (int cost);
         virtual bool buy_hotel(int cost);
 
+        int pay(Player &p2, int cost); //restituisce il nuovo budget del giocatore pagante
+
         const std::vector<std::string>& get_houses(); //meglio restituire una copia modificabile?
         const std::vector<std::string>& get_hotels();
         const std::vector<std::string>& get_lands();

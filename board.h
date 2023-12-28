@@ -10,7 +10,8 @@ class Board{
     
     const int HEIGHT = 8;
     const int WIDTH = 8;
-    const int players_number = 4;
+
+    int players_number;
     int turn;
 
     const char house = '*';
@@ -22,8 +23,8 @@ class Board{
     const int economic_land = 6, standard_land = 10, luxurious_land = 20;
     const int economic_house = 3, standard_house = 5, luxurious_house = 10;
     const int economic_hotel = 3, standard_hotel = 5, luxurious_hotel = 10;
-    const int lodging_Ehouse = 2, lodgingShouse = 4, lodging_Lhouse = 7;
-    const int lodging_Ehotel = 4, lodgingShotel = 8, lodgingLhotel = 14;
+    const int lodging_Ehouse = 2, lodging_Shouse = 4, lodging_Lhouse = 7;
+    const int lodging_Ehotel = 4, lodging_Shotel = 8, lodging_Lhotel = 14;
 
     std::ofstream output_file;
     std::string file_name;
@@ -67,6 +68,7 @@ class Board{
         void fill_board();
 
         void next(); 
+        void eliminate(int player_index);
 
         void p_order();
 

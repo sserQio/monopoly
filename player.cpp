@@ -60,7 +60,17 @@ bool Player::buy_hotel(int c){
     //rimuovere dalle case? decidere politiche di stampa proprietà
 }
 
+int Player::pay(Player& p2, int c){
+    //se il pagamento è negativo, lo interpreto come un guadagno, altrimenti avrei potuto lanciare un eccezione
+    if (c < 0)  return p2.pay(*this, abs(c));
 
+    //in caso il pagante non abbia sufficienti fondi, p2 riceve solo una parte del compenso
+    if(c - budget >= 0)     p2.budget += c - (c - budget); 
+    else{   p2.budget += c;}
+
+    //non lancio eccezioni in caso di saldo negativo perché lascio la gestione delle regole al tabellone
+    return budget -= c;
+}
 //   ---  FUNZIONI DI ACCESSO  ---
 
 std::string Player::get_name(){
