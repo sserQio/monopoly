@@ -11,6 +11,10 @@ class Board{
     const int HEIGHT = 8;
     const int WIDTH = 8;
 
+    int n_economy;
+    int n_standard;
+    int n_luxurious;
+
     int players_number;
     int turn;
 
@@ -36,14 +40,10 @@ class Board{
 
     std::vector<std::vector<Box> > board = std::vector<std::vector<Box> >(HEIGHT, std::vector<Box>(WIDTH));
 
-    //modificare per supportare tabelloni di qualsiasi dimensioni.
-    //std::vector<char> letters {'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L'};
+    //const std::vector<char> letters = {'E', 'S', 'L'};
+    const char letters[3] = {'E', 'S', 'L'};
 
     std::vector<Player> players = std::vector<Player>(players_number);
-
-    //lista di ciascuna casella con eventuale indice di proprietà di un giocatore.
-    //Utile per migliorare notevolmente le prestazioni in caso di necessità di verificare a che appartenga un terreno. 
-    //(diventano Θ(1))
 
     static bool compare_throws(const std::string& s1, const std::string& s2); 
 
@@ -67,7 +67,7 @@ class Board{
         std::vector<char> get_letters();
         void fill_board();
 
-        void next(); 
+        bool next(); 
         void eliminate(int player_index);
 
         void p_order();

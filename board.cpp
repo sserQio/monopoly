@@ -3,7 +3,8 @@
 
 
 //   ---  COSTRUTTORI  ---
-Board::Board(Player p1, Player p2, Player p3, Player p4) : file_name("output.txt"), turn (0), players_number(4) {
+Board::Board(Player p1, Player p2, Player p3, Player p4) 
+    : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6) {
     players.at(0) = p1;
     players.at(1) = p2;
     players.at(2) = p3;
@@ -21,10 +22,6 @@ int Board::get_height(){    return HEIGHT;}
 int Board::get_width(){     return WIDTH;}
 int Board::start_increment(){   return through_start;}
 
-/*
-std::vector<char> Board::get_letters(){
-    return letters;
-}*/
 
 //   ---  FUNZIONI AUSILIARIE e DI GIOCO---
 
@@ -37,10 +34,10 @@ void Board::fill_board(){
     // riempimento della tabella
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
-            if ((x==0 && y==0) || (x==7 && y==0) ||(x==7 && y==7) ||(x==0 && y==7)){continue;}
+            if ((x == 0 && y == 0) || (x == 7 && y==0) ||(x==7 && y==7) ||(x==0 && y==7)){continue;}
             if ((x>1 && x<7) && (y>1 && y<7)){continue;}
             else {
-                //board[x][y] = letters.back();
+                //board[x][y].on_box = letters.back();
                 //letters.pop_back();
             }
         }
@@ -58,7 +55,6 @@ void Board::p_order(){
         std::string n = std::to_string(players.at(i).throw_dice());
         output_file << players.at(i).get_name() << " tira i dadi: " << n <<"\n";
         std::cout << players.at(i).get_name() << " tira i dadi: " << n <<"\n";
-
         //uso stringhe per poter etichettare a ciascun lancio l'indice del giocatore
         dice_throws.at(i) = std::to_string(i) + n; 
     }
@@ -149,12 +145,19 @@ int Board::whose_property(int* pos){
 }
 
 //gestione del turno di un giocatore: AGGIUNGERE OPZIONE "show()"
-void Board::next(){
-    if (turn >= players_number)     turn = 0;
-
+bool Board::next(){
     output_file.open(file_name);
     Player& player = players.at(turn);
     std::string name = player.get_name();
+
+    if (players_number == 1){
+        output_file << name << " ha vinto la partita" << "\n";
+        std::cout << name << " ha vinto la partita" << "\n"; 
+
+        return true; 
+    }
+
+    if (turn >= players_number)     turn = 0;
     output_file << "È il turno di " << name << "\n";
     std::cout << "È il turno di " << name << "\n";
 
@@ -181,12 +184,12 @@ void Board::next(){
     //aggiungo il player nel tabellone
     n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
     board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
-    board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn);
+    board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + '|';
 
     //verifico in che cella mi trovo e agisco di conseguenza
     player_pos = player.get_pos();
-    output_file << name << "si trova nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
-    std::cout << name << "si trova nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
+    output_file << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
+    std::cout << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
 
     if (!((player_pos[0] == 0 || player_pos[0] == HEIGHT-1) && (player_pos[1] == 0 || player_pos[1] == WIDTH-1))){
         //(se non sono in un angolo del tabellone)
@@ -318,19 +321,24 @@ void Board::next(){
     std::cout << name << " termina il turno" << "\n" << "\n";
     output_file.close();
     turn++;
+
+    return false;
 }
 
 void Board::eliminate(int player_index){
     int* player_pos = players.at(player_index).get_pos();
 
+    //elimino il giocatore dal tabellone nella sua posizione corrente
+    int i = board[player_pos[0]][player_pos[1]].on_box.find(std::to_string(player_index));
+    board[player_pos[0]][player_pos[1]].on_box.at(i) = '\0';
+
+    //elimino tutte le proprietà del giocatore
     for (int j = 0; j < HEIGHT; j++){
         for(auto& i : board.at(j)){
             if (i.index == player_index){
                 if (i.on_box.at(2) == '*' || i.on_box.at(2) == '^')     i.on_box.at(2) = '\0';
                 i.index = -1;
             }
-            int j = i.on_box.find(std::to_string(player_index));
-            if (j != std::string::npos)   i.on_box.at(j) = '\0';
         }
     }
     players.erase(players.begin() + player_index);
@@ -347,27 +355,27 @@ void Board::print_board(){
 
 std::string to_string(Board::rows c){
     /*switch(c){
-        case Board::columns::A : return "A";
-        case Board::columns::B : return "B";
-        case Board::columns::C : return "C";
-        case Board::columns::D : return "D";
-        case Board::columns::E : return "E";
-        case Board::columns::F : return "F";
-        case Board::columns::G : return "G";
-        case Board::columns::H : return "H";
-        case Board::columns::I : return "I";
-        case Board::columns::L : return "L";
-        case Board::columns::M : return "M";
-        case Board::columns::N : return "N";
-        case Board::columns::O : return "O";
-        case Board::columns::P : return "P";
-        case Board::columns::Q : return "Q";
-        case Board::columns::R : return "R";
-        case Board::columns::S : return "S";
-        case Board::columns::T : return "T";
-        case Board::columns::U : return "U";
-        case Board::columns::V : return "V";
-        case Board::columns::Z : return "Z";
+        case Board::rows::A : return "A";
+        case Board::rows::B : return "B";
+        case Board::rows::C : return "C";
+        case Board::rows::D : return "D";
+        case Board::rows::E : return "E";
+        case Board::rows::F : return "F";
+        case Board::rows::G : return "G";
+        case Board::rows::H : return "H";
+        case Board::rows::I : return "I";
+        case Board::rows::L : return "L";
+        case Board::rows::M : return "M";
+        case Board::rows::N : return "N";
+        case Board::rows::O : return "O";
+        case Board::rows::P : return "P";
+        case Board::rows::Q : return "Q";
+        case Board::rows::R : return "R";
+        case Board::rows::S : return "S";
+        case Board::rows::T : return "T";
+        case Board::rows::U : return "U";
+        case Board::rows::V : return "V";
+        case Board::rows::Z : return "Z";
     }*/
 }
 
