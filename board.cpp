@@ -144,6 +144,10 @@ bool Board::compare_throws(const std::string& throw1, const std::string& throw2)
     return std::stoi(throw1.substr(1)) > std::stoi(throw2.substr(1));
 }
 
+int Board::whose_property(int* pos){
+    return board[pos[0]][pos[1]].index;
+}
+
 void Board::next(){
     if (turn == players_number)     turn = 0;
 
@@ -159,9 +163,9 @@ void Board::next(){
 
     //rimuovo il player dalla sua posizione attuale nel tabellone
     int* player_pos = player.get_pos();
-    for (int i = 0; i < board[player_pos[0]][player_pos[1]].length(); i++){
-        if (board[player_pos[0]][player_pos[1]][i] == *std::to_string(turn).c_str()){
-            board[player_pos[0]][player_pos[1]][i] = '\0';
+    for (int i = 0; i < board[player_pos[0]][player_pos[1]].on_box.length(); i++){
+        if (board[player_pos[0]][player_pos[1]].on_box[i] == *std::to_string(turn).c_str()){
+            board[player_pos[0]][player_pos[1]].on_box[i] = '\0';
         }
     }
 
@@ -169,45 +173,108 @@ void Board::next(){
     int prev_budget = player.get_budget();
     player.move(*this, n);
     if (player.get_budget() == prev_budget + through_start){
-        output_file << player.get_name() << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
-        std::cout << player.get_name() << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
+        output_file << name << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
+        std::cout << name << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
     }
 
     //aggiungo il player nel tabellone
-    int n = board[player_pos[0]][player_pos[1]].length();
-    board[player_pos[0]][player_pos[1]][n-1] = '\0';
-    board[player_pos[0]][player_pos[1]]+=std::to_string(turn);
+    n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
+    board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
+    board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn);
 
     //verifico in che cella mi trovo e agisco di conseguenza
     player_pos = player.get_pos();
-    output_file << player.get_name() << "si trova nella casella " << to_string(rows(player_pos[0]))+std::to_string(player_pos[1]) << "\n";
-    std::cout << player.get_name() << "si trova nella casella " << to_string(rows(player_pos[0]))+std::to_string(player_pos[1]) << "\n";
+    output_file << name << "si trova nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
+    std::cout << name << "si trova nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
 
     if (!((player_pos[0] == 0 || player_pos[0] == HEIGHT-1) && (player_pos[1] == 0 || player_pos[1] == WIDTH-1))){
         //(se non sono in un angolo del tabellone)
 
         int i = whose_property(player_pos);
+        std::string box = board[player_pos[0]][player_pos[1]].on_box;
+
+        //Il terreno è libero
         if (i == -1){
             output_file << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
             std::cout << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
 
-            std::string box = board[player_pos[0]][player_pos[1]];
             if (box.at(1) == 'E' && player.buy_land(economic_land)){
-                output_file << player.get_name() << "compra il terreno per " << economic_land << "fiorini" <<"\n"; 
-                std::cout << player.get_name() << "compra il terreno per " << economic_land << "fiorini" <<"\n"; 
+                output_file << name << "compra il terreno per " << economic_land << "fiorini" <<"\n"; 
+                std::cout << name << "compra il terreno per " << economic_land << "fiorini" <<"\n";
+
+                board[player_pos[0]][player_pos[1]].index = turn;
             }
             else if (box.at(1) == 'S' && player.buy_land(standard_land)){
-                output_file << player.get_name() << "compra il terreno per " << standard_land << "fiorini" <<"\n"; 
-                std::cout << player.get_name() << "compra il terreno per " << standard_land << "fiorini" <<"\n";
+                output_file << name << "compra il terreno per " << standard_land << "fiorini" <<"\n"; 
+                std::cout << name << "compra il terreno per " << standard_land << "fiorini" <<"\n";
+
+                board[player_pos[0]][player_pos[1]].index = turn;
             }
             else if (box.at(1) == 'L' && player.buy_land(luxurious_land)){
-                output_file << player.get_name() << "compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
-                std::cout << player.get_name() << "compra il terreno per " << luxurious_land << "fiorini" <<"\n";
+                output_file << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
+                std::cout << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n";
+
+                board[player_pos[0]][player_pos[1]].index = turn;
             }
             else{
-                output_file << player.get_name() << "non ha fondi sufficienti per comprare il terreno " << "\n"; 
-                std::cout << player.get_name() << "non ha fondi sufficienti per comprare il terreno " << "\n";
+                output_file << name << "non ha fondi sufficienti per comprare il terreno " << "\n"; 
+                std::cout << name << "non ha fondi sufficienti per comprare il terreno " << "\n";
             }
+        }
+
+        //Il terreno è del giocatore, ma non possiede né case né hotel
+        else if (i == turn && box.at(2) != hotel && box.at(2) != house){
+            output_file << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
+            std::cout << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
+
+            if (box.at(1) == 'E' && player.buy_house(economic_house)){
+                output_file << name << "compra una casa per " << economic_house << "fiorini" <<"\n"; 
+                std::cout << name << "compra una casa per " << economic_house << "fiorini" <<"\n";
+
+            }
+            else if (box.at(1) == 'S' && player.buy_house(standard_house)){
+                output_file << name << "compra una casa per " << standard_house << "fiorini" <<"\n"; 
+                std::cout << name << "compra una casa per " << standard_house << "fiorini" <<"\n";
+            }
+            else if (box.at(1) == 'L' && player.buy_house(luxurious_house)){
+                output_file << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n"; 
+                std::cout << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n";
+
+            }
+            else{
+                output_file << name << "non ha fondi sufficienti per investire in una casa " << "\n"; 
+                std::cout << name << "non ha fondi sufficienti per investire in una casa " << "\n";
+            }
+        }
+
+        //Il terreno è del giocatore ed ha già una casa
+        else if (i == turn && box.at(2) == house){
+            output_file << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
+            std::cout << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
+
+            if (box.at(1) == 'E' && player.buy_hotel(economic_hotel)){
+                output_file << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
+                std::cout << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n";
+
+            }
+            else if (box.at(1) == 'S' && player.buy_hotel(standard_hotel)){
+                output_file << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
+                std::cout << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n";
+            }
+            else if (box.at(1) == 'L' && player.buy_hotel(luxurious_hotel)){
+                output_file << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
+                std::cout << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
+
+            }
+            else{
+                output_file << name << "non ha fondi sufficienti per investire in un hotel " << "\n"; 
+                std::cout << name << "non ha fondi sufficienti per investire in un hotel " << "\n";
+            }
+        }
+
+        else{ //in tutti gli altri casi index rappresenta uno degli altri giocatori
+
+            //completare
         }
     }
 

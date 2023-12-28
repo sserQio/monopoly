@@ -13,6 +13,9 @@ class Board{
     const int players_number = 4;
     int turn;
 
+    const char house = '*';
+    const char hotel = '^';
+
     //costi e spese
     const int through_start = 20;
 
@@ -25,13 +28,21 @@ class Board{
     std::ofstream output_file;
     std::string file_name;
 
+    struct Box{ //lascio libero accesso perché può avvenire solo in board, essendo membro privato
+        std::string on_box;
+        int index;
+    };
 
-    std::vector<std::vector<std::string> > board = std::vector<std::vector<std::string> >(HEIGHT, std::vector<std::string>(WIDTH));
+    std::vector<std::vector<Box> > board = std::vector<std::vector<Box> >(HEIGHT, std::vector<Box>(WIDTH));
 
     //modificare per supportare tabelloni di qualsiasi dimensioni.
     //std::vector<char> letters {'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L'};
 
     std::vector<Player> players = std::vector<Player>(players_number);
+
+    //lista di ciascuna casella con eventuale indice di proprietà di un giocatore.
+    //Utile per migliorare notevolmente le prestazioni in caso di necessità di verificare a che appartenga un terreno. 
+    //(diventano Θ(1))
 
     static bool compare_throws(const std::string& s1, const std::string& s2); 
 

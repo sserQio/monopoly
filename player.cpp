@@ -38,7 +38,7 @@ bool Player::buy_land(int c){
     if (budget < c)     return false;
     //altrimenti
     budget -= c;
-    lands.push_back(to_string(Board::rows(pos[0])) += (char)pos[1]);
+    lands.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
     return true;
 }
 
@@ -46,7 +46,7 @@ bool Player::buy_house(int c){
     if (budget < c)     return false;
 
     budget -= c;
-    houses.push_back(to_string(Board::rows(pos[0])) += (char)pos[1]);
+    houses.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
     return true;
     //rimuovere dai terreni? decidere politiche di stampa proprietà
 }
@@ -55,7 +55,7 @@ bool Player::buy_hotel(int c){
     if (budget < c)     return false;
 
     budget -= c;
-    hotels.push_back(to_string(Board::rows(pos[0])) += (char)pos[1]);
+    hotels.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
     return true;
     //rimuovere dalle case? decidere politiche di stampa proprietà
 }
