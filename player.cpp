@@ -34,30 +34,46 @@ void Player::move(Board& b, int n){
     if(n > 0)   move(b, n);
 }
 
-purchase Player::buy_land(int c){ 
+Player::purchase Player::buy_land(int c){ 
     if (budget < c)     return purchase::OUT_OF_BALANCE;
     //altrimenti
     budget -= c;
+
     lands.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
+
     return purchase::DONE;
 }
 
-purchase Player::buy_house(int c){ 
+Player::purchase Player::buy_house(int c){ 
     if (budget < c)     return purchase::OUT_OF_BALANCE;
 
     budget -= c;
-    houses.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
+    
+    std::string coordinates = to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str();
+    houses.push_back(coordinates);
+
+    //elimino la posizione dalla lista di terreni posseduti (indicante i terreni senza costruzione)
+    //effettuo un controllo sull'iteratore restituito perché voglio un'indipendenza dalle regole di gioco:
+        //se definissi un diverso board in cui è possibile acquistare direttamente una casa, non dovrò
+        //modificare il metodo
+    std::vector<std::string>::iterator i = std::find(lands.begin(), lands.end(), coordinates);
+    if (i != lands.end())   lands.erase (i); 
+    
     return purchase::DONE;
-    //rimuovere dai terreni? decidere politiche di stampa proprietà
 }
 
-purchase Player::buy_hotel(int c){
+Player::purchase Player::buy_hotel(int c){
     if (budget < c)     return purchase::OUT_OF_BALANCE;
 
     budget -= c;
-    hotels.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
+    
+    std::string coordinates = to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str();
+    hotels.push_back(coordinates);
+
+    std::vector<std::string>::iterator i = std::find(houses.begin(), houses.end(), coordinates);
+    if (i != houses.end())      houses.erase(i);
+
     return purchase::DONE;
-    //rimuovere dalle case? decidere politiche di stampa proprietà
 }
 
 int Player::pay(Player& p2, int c){

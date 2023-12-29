@@ -31,20 +31,17 @@ class Player{
 
         virtual void your_turn();
 
+
+        enum class purchase {DONE, OUT_OF_BALANCE, NOT_DONE};   
         virtual purchase buy_land(int cost);
         virtual purchase buy_house (int cost);
         virtual purchase buy_hotel(int cost);
 
-        int pay(Player &p2, int cost); //restituisce il nuovo budget del giocatore pagante
+        int pay(Player& p2, int cost); //restituisce il nuovo budget del giocatore pagante
 
         const std::vector<std::string>& get_houses(); //meglio restituire una copia modificabile?
         const std::vector<std::string>& get_hotels();
         const std::vector<std::string>& get_lands();
-
-
-
 };
-
-enum class purchase {DONE, OUT_OF_BALANCE, NOT_DONE};
 
 #endif //PLAYER_H

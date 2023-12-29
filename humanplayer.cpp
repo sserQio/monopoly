@@ -23,17 +23,17 @@ bool HumanPlayer::ask_input(int cost){
 
 //   ---  OVERRIDE VIRTUAL FUNCTIONS  ---
 
-purchase HumanPlayer::buy_land(int cost){
+Player::purchase HumanPlayer::buy_land(int cost){
     if (ask_input(cost))    return Player::buy_land(cost);
 
     return purchase::NOT_DONE;
 }
-purchase HumanPlayer::buy_house(int cost){  
+Player::purchase HumanPlayer::buy_house(int cost){  
     if (ask_input(cost))    return Player::buy_land(cost);
     
     return purchase::NOT_DONE;
 }
-purchase HumanPlayer::buy_hotel(int cost){  
+Player::purchase HumanPlayer::buy_hotel(int cost){  
     if (ask_input(cost))    return Player::buy_hotel(cost);
 
     return purchase::NOT_DONE;    

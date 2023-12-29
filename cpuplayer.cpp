@@ -3,7 +3,7 @@
 
 //   ---  OVERRIDE VIRTUAL FUNCTIONS  ---
 
-purchase CPUPlayer::buy_land(int cost){
+Player::purchase CPUPlayer::buy_land(int cost){
     srand(time(0));
     int i = rand()%4;
  
@@ -12,7 +12,7 @@ purchase CPUPlayer::buy_land(int cost){
 }
 
 
-purchase CPUPlayer::buy_house(int cost){
+Player::purchase CPUPlayer::buy_house(int cost){
     srand(time(0));
     int i = rand()%4;
  
@@ -21,7 +21,7 @@ purchase CPUPlayer::buy_house(int cost){
 }
 
 
-purchase CPUPlayer::buy_hotel(int cost){
+Player::purchase CPUPlayer::buy_hotel(int cost){
     srand(time(0));
     int i = rand()%4;
  
