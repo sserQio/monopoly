@@ -13,7 +13,7 @@ bool HumanPlayer::ask_input(int cost){
     std::cout <<"\n";
 
     while (true){
-        if (c == 'y' || c == 'Y')   return true;
+        if (c == 'y' || c == 'Y' || c == 's' || c == 'S')   return true;
         else if (c == 'n' || c == 'N')  return false;
         else{
             std::cout << "Errore nell'inserimento input: riprovare con 'y' per procedere o 'n' per bloccare la transazione" <<"\n";
@@ -23,6 +23,18 @@ bool HumanPlayer::ask_input(int cost){
 
 //   ---  OVERRIDE VIRTUAL FUNCTIONS  ---
 
-bool HumanPlayer::buy_land(int cost){   if (ask_input(cost))    return Player::buy_land(cost);}
-bool HumanPlayer::buy_house(int cost){  if (ask_input(cost))    return Player::buy_land(cost);}
-bool HumanPlayer::buy_hotel(int cost){  if (ask_input(cost))    return Player::buy_hotel(cost);}
+purchase HumanPlayer::buy_land(int cost){
+    if (ask_input(cost))    return Player::buy_land(cost);
+
+    return purchase::NOT_DONE;
+}
+purchase HumanPlayer::buy_house(int cost){  
+    if (ask_input(cost))    return Player::buy_land(cost);
+    
+    return purchase::NOT_DONE;
+}
+purchase HumanPlayer::buy_hotel(int cost){  
+    if (ask_input(cost))    return Player::buy_hotel(cost);
+
+    return purchase::NOT_DONE;    
+}

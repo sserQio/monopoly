@@ -29,9 +29,11 @@ class Player{
 
         void move(Board& board, int times); 
 
-        virtual bool buy_land(int cost);
-        virtual bool buy_house (int cost);
-        virtual bool buy_hotel(int cost);
+        virtual void your_turn();
+
+        virtual purchase buy_land(int cost);
+        virtual purchase buy_house (int cost);
+        virtual purchase buy_hotel(int cost);
 
         int pay(Player &p2, int cost); //restituisce il nuovo budget del giocatore pagante
 
@@ -39,6 +41,10 @@ class Player{
         const std::vector<std::string>& get_hotels();
         const std::vector<std::string>& get_lands();
 
+
+
 };
+
+enum class purchase {DONE, OUT_OF_BALANCE, NOT_DONE};
 
 #endif //PLAYER_H

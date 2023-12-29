@@ -34,29 +34,29 @@ void Player::move(Board& b, int n){
     if(n > 0)   move(b, n);
 }
 
-bool Player::buy_land(int c){ 
-    if (budget < c)     return false;
+purchase Player::buy_land(int c){ 
+    if (budget < c)     return purchase::OUT_OF_BALANCE;
     //altrimenti
     budget -= c;
     lands.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
-    return true;
+    return purchase::DONE;
 }
 
-bool Player::buy_house(int c){ 
-    if (budget < c)     return false;
+purchase Player::buy_house(int c){ 
+    if (budget < c)     return purchase::OUT_OF_BALANCE;
 
     budget -= c;
     houses.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
-    return true;
+    return purchase::DONE;
     //rimuovere dai terreni? decidere politiche di stampa proprietà
 }
 
-bool Player::buy_hotel(int c){
-    if (budget < c)     return false;
+purchase Player::buy_hotel(int c){
+    if (budget < c)     return purchase::OUT_OF_BALANCE;
 
     budget -= c;
     hotels.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
-    return true;
+    return purchase::DONE;
     //rimuovere dalle case? decidere politiche di stampa proprietà
 }
 

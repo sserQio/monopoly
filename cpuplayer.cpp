@@ -3,30 +3,30 @@
 
 //   ---  OVERRIDE VIRTUAL FUNCTIONS  ---
 
-bool CPUPlayer::buy_land(int cost){
+purchase CPUPlayer::buy_land(int cost){
     srand(time(0));
     int i = rand()%4;
  
-    if (i == 0) return buy_land(cost);
-    return false;
+    if (i == 0) return Player::buy_land(cost);
+    return purchase::NOT_DONE;
 }
 
 
-bool CPUPlayer::buy_house(int cost){
+purchase CPUPlayer::buy_house(int cost){
     srand(time(0));
     int i = rand()%4;
  
-    if (i == 0) return buy_house(cost);
-    return false;
+    if (i == 0) return Player::buy_house(cost);
+    return purchase::NOT_DONE;
 }
 
 
-bool CPUPlayer::buy_hotel(int cost){
+purchase CPUPlayer::buy_hotel(int cost){
     srand(time(0));
     int i = rand()%4;
  
-    if (i == 0) return buy_hotel(cost);
-    return false;
+    if (i == 0) return Player::buy_hotel(cost);
+    return purchase::NOT_DONE;
 }
 
 

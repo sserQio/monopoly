@@ -197,32 +197,50 @@ bool Board::next(){
         int i = whose_property(player_pos);
         std::string box = board[player_pos[0]][player_pos[1]].on_box;
 
+        purchase done = purchase::NOT_DONE;
         //Il terreno è libero
         if (i == -1){
             output_file << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
             std::cout << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
 
-            if (box.at(1) == 'E' && player.buy_land(economic_land)){
-                output_file << name << "compra il terreno per " << economic_land << "fiorini" <<"\n"; 
-                std::cout << name << "compra il terreno per " << economic_land << "fiorini" <<"\n";
+            if (box.at(1) == 'E'){
+            
+                done = player.buy_land(economic_land);
+                if (done == purchase::DONE){
+                    output_file << name << "compra il terreno per " << economic_land << "fiorini" <<"\n"; 
+                    std::cout << name << "compra il terreno per " << economic_land << "fiorini" <<"\n";
 
-                board[player_pos[0]][player_pos[1]].index = turn;
+                    board[player_pos[0]][player_pos[1]].index = turn;
+                }
             }
-            else if (box.at(1) == 'S' && player.buy_land(standard_land)){
-                output_file << name << "compra il terreno per " << standard_land << "fiorini" <<"\n"; 
-                std::cout << name << "compra il terreno per " << standard_land << "fiorini" <<"\n";
+            else if (box.at(1) == 'S'){
 
-                board[player_pos[0]][player_pos[1]].index = turn;
-            }
-            else if (box.at(1) == 'L' && player.buy_land(luxurious_land)){
-                output_file << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
-                std::cout << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n";
+                done = player.buy_land(standard_land);
+                if (done == purchase::DONE){
+                    output_file << name << "compra il terreno per " << standard_land << "fiorini" <<"\n"; 
+                    std::cout << name << "compra il terreno per " << standard_land << "fiorini" <<"\n";
 
-                board[player_pos[0]][player_pos[1]].index = turn;
+                    board[player_pos[0]][player_pos[1]].index = turn;
+                }
             }
-            else{
+            else if (box.at(1) == 'L'){
+
+                done = player.buy_land(luxurious_land);
+                if (done == purchase::DONE){
+                    output_file << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
+                    std::cout << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n";
+
+                    board[player_pos[0]][player_pos[1]].index = turn;
+                }
+            }
+
+            if (done == purchase::OUT_OF_BALANCE){
                 output_file << name << "non ha fondi sufficienti per comprare il terreno " << "\n"; 
                 std::cout << name << "non ha fondi sufficienti per comprare il terreno " << "\n";
+            }
+            else if (done == purchase::NOT_DONE){
+                output_file << name << "non compra il terreno " << "\n"; 
+                std::cout << name << "non compra il terreno " << "\n";
             }
         }
 
@@ -231,23 +249,38 @@ bool Board::next(){
             output_file << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
             std::cout << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
 
-            if (box.at(1) == 'E' && player.buy_house(economic_house)){
-                output_file << name << "compra una casa per " << economic_house << "fiorini" <<"\n"; 
-                std::cout << name << "compra una casa per " << economic_house << "fiorini" <<"\n";
+            if (box.at(1) == 'E'){
 
+                done = player.buy_house(economic_house);
+                if (done == purchase::DONE){
+                    output_file << name << "compra una casa per " << economic_house << "fiorini" <<"\n"; 
+                    std::cout << name << "compra una casa per " << economic_house << "fiorini" <<"\n";
+                }
             }
-            else if (box.at(1) == 'S' && player.buy_house(standard_house)){
-                output_file << name << "compra una casa per " << standard_house << "fiorini" <<"\n"; 
-                std::cout << name << "compra una casa per " << standard_house << "fiorini" <<"\n";
-            }
-            else if (box.at(1) == 'L' && player.buy_house(luxurious_house)){
-                output_file << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n"; 
-                std::cout << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n";
+            else if (box.at(1) == 'S'){
 
+                done = player.buy_house(standard_house);
+                if (done == purchase::DONE){
+                    output_file << name << "compra una casa per " << standard_house << "fiorini" <<"\n"; 
+                    std::cout << name << "compra una casa per " << standard_house << "fiorini" <<"\n";
+                }
             }
-            else{
+            else if (box.at(1) == 'L'){
+
+                done = player.buy_house(luxurious_house);
+                if (done == purchase::DONE){
+                    output_file << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n"; 
+                    std::cout << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n";
+                }
+            }
+
+            if (done == purchase::OUT_OF_BALANCE){
                 output_file << name << "non ha fondi sufficienti per investire in una casa " << "\n"; 
                 std::cout << name << "non ha fondi sufficienti per investire in una casa " << "\n";
+            }
+            else if (done == purchase::NOT_DONE){
+                output_file << name << "non investe in una casa " << "\n"; 
+                std::cout << name << "non investe in una casa " << "\n";
             }
         }
 
@@ -256,23 +289,38 @@ bool Board::next(){
             output_file << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
             std::cout << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
 
-            if (box.at(1) == 'E' && player.buy_hotel(economic_hotel)){
-                output_file << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
-                std::cout << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n";
+            if (box.at(1) == 'E'){
 
+                done = player.buy_hotel(economic_hotel);
+                if (done == purchase::DONE){
+                    output_file << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
+                    std::cout << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n";
+                }
             }
-            else if (box.at(1) == 'S' && player.buy_hotel(standard_hotel)){
-                output_file << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
-                std::cout << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n";
-            }
-            else if (box.at(1) == 'L' && player.buy_hotel(luxurious_hotel)){
-                output_file << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
-                std::cout << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
+            else if (box.at(1) == 'S'){
 
+                done = player.buy_hotel(standard_hotel);
+                if (done == purchase::DONE){
+                    output_file << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
+                    std::cout << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n";
+                }
             }
-            else{
+            else if (box.at(1) == 'L'){
+
+                done = player.buy_hotel(luxurious_hotel);
+                if (done == purchase::DONE){
+                    output_file << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
+                    std::cout << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
+                }
+            }
+
+            if (done == purchase::OUT_OF_BALANCE){
                 output_file << name << "non ha fondi sufficienti per investire in un hotel " << "\n"; 
                 std::cout << name << "non ha fondi sufficienti per investire in un hotel " << "\n";
+            }
+            else if (done == purchase::NOT_DONE){
+                output_file << name << "non investe in un hotel " << "\n"; 
+                std::cout << name << "non investe in un hotel " << "\n";
             }
         }
 

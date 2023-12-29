@@ -7,7 +7,6 @@
 class Player;
 
 class Board{
-    
     const int HEIGHT = 8;
     const int WIDTH = 8;
 
@@ -21,6 +20,9 @@ class Board{
     const char house = '*';
     const char hotel = '^';
 
+    std::ofstream output_file;
+    std::string file_name;
+
     //costi e spese
     const int through_start = 20;
 
@@ -30,9 +32,7 @@ class Board{
     const int lodging_Ehouse = 2, lodging_Shouse = 4, lodging_Lhouse = 7;
     const int lodging_Ehotel = 4, lodging_Shotel = 8, lodging_Lhotel = 14;
 
-    std::ofstream output_file;
-    std::string file_name;
-
+    //caselle del tabellone
     struct Box{ //lascio libero accesso perché può avvenire solo in board, essendo membro privato
         std::string on_box;
         int index;
@@ -41,48 +41,44 @@ class Board{
     std::vector<std::vector<Box> > board = std::vector<std::vector<Box> >(HEIGHT, std::vector<Box>(WIDTH));
 
     //const std::vector<char> letters = {'E', 'S', 'L'};
-    const char letters[3] = {'E', 'S', 'L'};
+    const char box_types[3] = {'E', 'S', 'L'};
 
     std::vector<Player> players = std::vector<Player>(players_number);
 
+    // -- FUNZIONI PRIVATE --
+
     static bool compare_throws(const std::string& s1, const std::string& s2); 
 
-    //verifica se la posizione corrente (del giocatore che ha effettuato un movimento) appartiene 
-    //a qualcuno, e restituisce il numero del giocatore (in riferimento all'array di giocatori)
-    //Se il numero corrisponde al giocatore, può procedere a comprare una casa (o albergo)
-    //Se il numero corrisponde ad un altro giocatore, si prosegue con il pagamento del dazio
-    //Se nessuno possiede il terreno (-1) si può procedere ad acquistarlo
-    //Per le verifiche utilizzare std::find()
+    void fill_board(); //prepara il tabellone, chiamata dal costruttore
+
     public:
 
-        Board(); 
         Board(Player p1, Player p2, Player p3, Player p4);
 
-        void set_output_file(std::string file_name);
+        void set_output_file(std::string file);
     
         int get_height();
         int get_width();
-        int start_increment();
 
-        std::vector<char> get_letters();
-        void fill_board();
+        int start_increment(); //valore incremento in fiorini al passare dal via
 
-        bool next(); 
+        bool next(); //funzione del turno
+
         void eliminate(int player_index);
 
-        void p_order();
+        void p_order(); //ordine di gioco
 
-        void print_board();
+        void print_board(); 
+
+        void show();
 
         int whose_property(int* coordinates); 
 
-        enum class rows {A = 0, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
+        enum class rows {A, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
 
 };
 
 //valutare la convenienza o meno
-
-
 std::string to_string(Board::rows c);
 
 // 
