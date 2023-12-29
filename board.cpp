@@ -168,6 +168,11 @@ bool Board::next(){
     output_file << "È il turno di " << name << "\n";
     std::cout << "È il turno di " << name << "\n";
 
+    //Se è un giocatore con cui avere interazioni, gli offro la possibilità di scegliere cosa fare
+    //prima di continuare il turno (nel nostro caso sarà solo show(), ma si possono aggiungere funzioni)
+    bool interaction = player.interactions();
+    if (interaction)    show_options();
+
     int n = player.throw_dice();
     output_file << name << "tira i dadi: " << n <<"\n";
     std::cout << name << "tira i dadi: " << n <<"\n";
@@ -209,6 +214,9 @@ bool Board::next(){
         if (i == -1){
             output_file << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
             std::cout << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
+
+            //ripropongo il menù
+            if (interaction)    show_options();
 
             if (box.at(1) == 'E'){
             
@@ -256,6 +264,9 @@ bool Board::next(){
             output_file << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
             std::cout << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
 
+            //ripropongo il menù
+            if (interaction)    show_options();
+
             if (box.at(1) == 'E'){
 
                 done = player.buy_house(economic_house);
@@ -295,6 +306,9 @@ bool Board::next(){
         else if (i == turn && box.at(2) == house){
             output_file << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
             std::cout << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
+
+            //ripropongo il menù
+            if (interaction)    show_options();
 
             if (box.at(1) == 'E'){
 
@@ -372,6 +386,9 @@ bool Board::next(){
         }
     }
 
+    //ripropongo il menù
+    if (interaction)    show_options();
+
     output_file << name << " termina il turno" << "\n";
     std::cout << name << " termina il turno" << "\n" << "\n";
     output_file.close();
@@ -400,9 +417,17 @@ void Board::eliminate(int player_index){
     players_number--;
 }
 
+void Board::show_options(){
+    std::string input;
+    std::cout << "Si digiti 'show' per visualizzare la situazione attuale della partita, o ENTER per continuare: ";
+    std::getline(std::cin, input);
+
+    if (input == "show" || input == "'show'")   show();
+    else if (input == "\n")    return;
+    //se digita altri caratteri termina automaticamente, non servono ulteriori else
+}
+
 void Board::show(){
-    output_file.open(file_name);
-    output_file << "\n" << "Ecco la situazione attuale della partita: " << "\n";
     std::cout << "\n" << "Ecco la situazione attuale della partita: " << "\n";
     print_board();
 

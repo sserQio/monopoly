@@ -9,6 +9,7 @@ class CPUPlayer: public Player{
         CPUPlayer() : Player(){};
         CPUPlayer(std::string name) : Player(){     name = "CPU"+name;};
 
+        virtual bool interactions(){    return false;};
         virtual purchase buy_land(int cost);
         virtual purchase buy_house (int cost);
         virtual purchase buy_hotel(int cost);

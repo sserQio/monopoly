@@ -10,6 +10,7 @@ class HumanPlayer : public Player{
         HumanPlayer() : Player(){};
         HumanPlayer(std::string name) : Player(){   name = "Human"+name;};
 
+        virtual bool interactions(){    return true;};
         virtual purchase buy_land(int cost);
         virtual purchase buy_house(int cost);
         virtual purchase buy_hotel(int cost);

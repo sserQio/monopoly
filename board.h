@@ -51,6 +51,8 @@ class Board{
 
     void fill_board(); //prepara il tabellone, chiamata dal costruttore
 
+    void show();
+
     public:
 
         Board(Player p1, Player p2, Player p3, Player p4);
@@ -70,7 +72,7 @@ class Board{
 
         void print_board(); 
 
-        void show();
+        void show_options(); //funge da "menù" per possibili funzioni da chiamare tramite terminale durante il proprio turno
 
         int whose_property(int* coordinates); 
 

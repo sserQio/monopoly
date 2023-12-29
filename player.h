@@ -29,8 +29,9 @@ class Player{
 
         void move(Board& board, int times); 
 
-        virtual void your_turn();
-
+        //restituisce true solo se è un tipo di giocatore che può avere interazione via terminale
+        //(nel nostro caso solamente HumanPlayer, ma può dipendere dall'implementazione)
+        virtual bool interactions(){    return false;}; 
 
         enum class purchase {DONE, OUT_OF_BALANCE, NOT_DONE};   
         virtual purchase buy_land(int cost);
