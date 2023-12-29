@@ -458,7 +458,7 @@ void Board::show(){
 //   ---  HELPER FUNCTIONS  ---
 
 std::string to_string(Board::rows c){
-    /*switch(c){
+    switch(c){
         case Board::rows::A : return "A";
         case Board::rows::B : return "B";
         case Board::rows::C : return "C";
@@ -480,6 +480,6 @@ std::string to_string(Board::rows c){
         case Board::rows::U : return "U";
         case Board::rows::V : return "V";
         case Board::rows::Z : return "Z";
-    }*/
+    }
 }
 

@@ -76,7 +76,7 @@ class Board{
 
         int whose_property(int* coordinates); 
 
-        enum class rows {A, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
+        enum rows {A, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, Z};
 
 };
 
