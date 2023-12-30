@@ -55,7 +55,7 @@ class Board{
 
     public:
 
-        Board(Player p1, Player p2, Player p3, Player p4);
+        Board(Player& p1, Player& p2, Player& p3, Player& p4);
 
         void set_output_file(std::string file);
     

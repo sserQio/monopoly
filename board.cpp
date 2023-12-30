@@ -3,7 +3,7 @@
 
 
 //   ---  COSTRUTTORI  ---
-Board::Board(Player p1, Player p2, Player p3, Player p4) 
+Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
     : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6) {
     players.at(0) = p1;
     players.at(1) = p2;
