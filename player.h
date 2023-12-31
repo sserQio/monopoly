@@ -18,7 +18,7 @@ class Player{
         std::vector<std::string> lands;
 
     public:
-        Player() : budget(100), name("Player"){}; 
+        Player() : budget(100), name("Player"){ pos[0] = 0, pos[1] = 0;}; 
 
         int throw_dice();
         int get_budget();

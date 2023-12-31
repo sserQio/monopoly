@@ -1,14 +1,13 @@
 #include "board.h"
-#include "player.h"
-
+#include "player.cpp"
 
 //   ---  COSTRUTTORI  ---
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
     : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1) {
-    players.at(0) = p1;
-    players.at(1) = p2;
-    players.at(2) = p3;
-    players.at(3) = p4;
+    players.at(0) = &p1;
+    players.at(1) = &p2;
+    players.at(2) = &p3;
+    players.at(3) = &p4;
     fill_board();
 }
 
@@ -71,9 +70,9 @@ void Board::p_order(){
 
     std::vector<std::string> dice_throws (players_number);
     for (int i = 0; i < players_number; i++){
-        std::string n = std::to_string(players.at(i).throw_dice());
-        output_file << players.at(i).get_name() << " tira i dadi: " << n <<"\n";
-        std::cout << players.at(i).get_name() << " tira i dadi: " << n <<"\n";
+        std::string n = std::to_string((*players.at(i)).throw_dice());
+        output_file << players.at(i)->get_name() << " tira i dadi: " << n <<"\n";
+        std::cout << players.at(i)->get_name() << " tira i dadi: " << n <<"\n";
         //uso stringhe per poter etichettare a ciascun lancio l'indice del giocatore
         dice_throws.at(i) = std::to_string(i) + n; 
     }
@@ -86,7 +85,7 @@ void Board::p_order(){
             //(il primo elemento di dice_throws contiene l'etichetta del giocatore che giocherà per primo)
             
             //Inserisco un elemento identificativo dell'ordine anche nel nome del giocatore
-            players.at(i).set_name(players.at(i).get_name()+" ("+std::to_string(i+1)+"°)");
+            players.at(i)->set_name(players.at(i)->get_name()+" ("+std::to_string(i+1)+"°)");
         }
         else{ //sono in una sezione della lista di lanci ove ho ottenuto valori uguali: devo rilanciare
             
@@ -101,18 +100,18 @@ void Board::p_order(){
                 int value = std::stoi(dice_throws.at(c).substr(1));
     
                 //ritiro i dadi finché sono in tale sezione della lista (di lanci uguali)
-                std::string n = std::to_string(players.at(c).throw_dice());
+                std::string n = std::to_string((*players.at(c)).throw_dice());
 
-                output_file << players.at(c).get_name() << "ritira: " << n << "\n";
-                std::cout << players.at(c).get_name() << "ritira: " << n << "\n";
+                output_file << players.at(c)->get_name() << "ritira: " << n << "\n";
+                std::cout << players.at(c)->get_name() << "ritira: " << n << "\n";
                 
                 dice_throws.at(c) = dice_throws.at(c)[0] + n;
 
                 while(std::stoi(dice_throws.at(c++).substr(1)) == value){
-                    std::string n = std::to_string(players.at(c).throw_dice());
+                    std::string n = std::to_string(players.at(c)->throw_dice());
 
-                    output_file << players.at(c).get_name() << "ritira: " << n << "\n";
-                    std::cout << players.at(c).get_name() << "ritira: " << n << "\n";
+                    output_file << players.at(c)->get_name() << "ritira: " << n << "\n";
+                    std::cout << players.at(c)->get_name() << "ritira: " << n << "\n";
 
                     dice_throws.at(c) = dice_throws.at(c)[0] + n;
                 }
@@ -139,16 +138,16 @@ void Board::p_order(){
         
     }
     //manca il nome aggiornato all'ultimo player
-    players.at(players_number-1).set_name(players.at(players_number-1).get_name()+" ("+std::to_string((players_number-1))+"°)");
+    (players.at(players_number-1))->set_name((players.at(players_number-1))->get_name()+" ("+std::to_string((players_number-1))+"°)");
 
     //stampo l'ordine di gioco
     output_file << "\n" <<"Si gioca nell'ordine: ";
     std::cout << "\n" <<"Si gioca nell'ordine: ";
-    output_file << players.at(0).get_name();
-    std::cout << players.at(0).get_name();
-    for (int i = 1; i < players_number; i++){
-        output_file << ", " << players.at(i).get_name();
-        std::cout << ", " << players.at(i).get_name();
+    output_file << players.at(0)->get_name();
+    std::cout << players.at(0)->get_name();
+    for (int i = 0; i < players_number; i++){
+        output_file << ", " << players.at(i)->get_name();
+        std::cout << ", " << players.at(i)->get_name();
     }
     output_file << "\n" << "\n";
     std::cout << "\n" << "\n";
@@ -158,7 +157,7 @@ void Board::p_order(){
 //gestione del turno di un giocatore: AGGIUNGERE OPZIONE "show()"
 bool Board::next(){
     output_file.open(file_name);
-    Player& player = players.at(turn);
+    Player& player = *players.at(turn);
     std::string name = player.get_name();
 
     if (players_number == 1){
@@ -171,18 +170,18 @@ bool Board::next(){
     if (max_turn_number == 0){
         int budget = player.get_budget();
         for (int i = 0; i < players_number; i++){
-            int n = players.at(i).get_budget();
+            int n = players.at(i)->get_budget();
             if (n < budget){
                 players.erase(players.begin()+i);
                 players_number--;
             }
             else if (n > budget){
-                player = players.at(i); //il nuovo riferimento è il giocatore con il budget maggiore
+                player = *players.at(i); //il nuovo riferimento è il giocatore con il budget maggiore
                 players.erase(players.begin() + turn);
                 turn = i; //utile in caso si trovi un altro giocatore con budget maggiore
                 players_number--;
                 //se ci fossero giocatori precedentemente salvati in fondo al vettore perché con budget uguale, li rimuovo
-                while (players.back().get_budget() == budget){
+                while (players.back()->get_budget() == budget){
                     players.pop_back();
                     players_number--;
                 }
@@ -203,13 +202,12 @@ bool Board::next(){
             output_file << "Raggiunto il limite di turni. Il vincitore per maggior numero di fiorini (" << budget << ") è:";
             std::cout  << "Raggiunto il limite di turni. Il vincitore per maggior numero di fiorini (" << budget << ") è:";
         }
-        for(auto& i : players){
-            output_file << "\t" << i.get_name() << "\n";
-            std::cout << "\t" << i.get_name() << "\n";
+        for(auto i : players){
+            output_file << "\t" << i->get_name() << "\n";
+            std::cout << "\t" << i->get_name() << "\n";
         }
         return true;
     }
-
     if (turn >= players_number)     turn = 0;
     output_file << "È il turno di " << name << "\n";
     std::cout << "È il turno di " << name << "\n";
@@ -220,8 +218,8 @@ bool Board::next(){
     if (interaction)    show_options();
 
     int n = player.throw_dice();
-    output_file << name << "tira i dadi: " << n <<"\n";
-    std::cout << name << "tira i dadi: " << n <<"\n";
+    output_file << name << " tira i dadi: " << n <<"\n";
+    std::cout << name << " tira i dadi: " << n <<"\n";
 
     //rimuovo il player dalla sua posizione attuale nel tabellone
     int* player_pos = player.get_pos();
@@ -392,17 +390,17 @@ bool Board::next(){
         }
 
         else if (i != turn && box.at(2) == house){
-            if (box.at(1) == 'E' && player.pay(players.at(i), lodging_Ehouse) >= 0){
-                output_file << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i).get_name() << "per il pernottamento in casa" << "\n";
-                std::cout << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i).get_name() << "per il pernottamento in casa" << "\n";
+            if (box.at(1) == 'E' && player.pay(*players.at(i), lodging_Ehouse) >= 0){
+                output_file << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
+                std::cout << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
             }
-            else if (box.at(1) == 'S' && player.pay(players.at(i), lodging_Shouse) >= 0){
-                output_file << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i).get_name() << "per il pernottamento in casa" << "\n";
-                std::cout << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i).get_name() << "per il pernottamento in casa" << "\n";
+            else if (box.at(1) == 'S' && player.pay(*players.at(i), lodging_Shouse) >= 0){
+                output_file << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
+                std::cout << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
             }
-            else if (box.at(1) == 'L' && player.pay(players.at(i), lodging_Lhouse) >= 0){
-                output_file << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i).get_name() << "per il pernottamento in casa" << "\n";
-                std::cout << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i).get_name() << "per il pernottamento in casa" << "\n";
+            else if (box.at(1) == 'L' && player.pay(*players.at(i), lodging_Lhouse) >= 0){
+                output_file << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
+                std::cout << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
             }
             else{
                 output_file << name << " non ha fondi sufficienti per il pernottamento: eliminato" << "\n";
@@ -412,17 +410,17 @@ bool Board::next(){
         }
 
         else if (i != turn && box.at(2) == hotel){
-            if (box.at(1) == 'E' && player.pay(players.at(i), lodging_Ehotel) >= 0){
-                output_file << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i).get_name() << "per il pernottamento in hotel" << "\n";
-                std::cout << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i).get_name() << "per il pernottamento in hotel" << "\n";
+            if (box.at(1) == 'E' && player.pay(*players.at(i), lodging_Ehotel) >= 0){
+                output_file << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
+                std::cout << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
             }
-            else if (box.at(1) == 'S' && player.pay(players.at(i), lodging_Shotel) >= 0){
-                output_file << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i).get_name() << "per il pernottamento in hotel" << "\n";
-                std::cout << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i).get_name() << "per il pernottamento in hotel" << "\n";
+            else if (box.at(1) == 'S' && player.pay(*players.at(i), lodging_Shotel) >= 0){
+                output_file << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
+                std::cout << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
             }
-            else if (box.at(1) == 'L' && player.pay(players.at(i), lodging_Lhotel) >= 0){
-                output_file << name << " paga " << lodging_Lhotel << " fiorini a " << players.at(i).get_name() << "per il pernottamento in hotel" << "\n";
-                std::cout << name << " paga " << lodging_Lhotel<< " fiorini a " << players.at(i).get_name() << "per il pernottamento in hotel" << "\n";
+            else if (box.at(1) == 'L' && player.pay(*players.at(i), lodging_Lhotel) >= 0){
+                output_file << name << " paga " << lodging_Lhotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
+                std::cout << name << " paga " << lodging_Lhotel<< " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
             }
             else{
                 output_file << name << " non ha fondi sufficienti per il pernottamento: eliminato" << "\n";
@@ -445,7 +443,7 @@ bool Board::next(){
 }
 
 void Board::eliminate(int player_index){
-    int* player_pos = players.at(player_index).get_pos();
+    int* player_pos = players.at(player_index)->get_pos();
 
     //elimino il giocatore dal tabellone nella sua posizione corrente
     int i = board[player_pos[0]][player_pos[1]].on_box.find(std::to_string(player_index));
@@ -479,25 +477,25 @@ void Board::show(){
     print_board();
 
     //stampo le posizioni di alberghi, case e terreni vuoti di ciascun giocatore
-    for (auto& i : players){
-        std::string name = i.get_name();
+    for (auto i : players){
+        std::string name = i->get_name();
 
         std::cout << name <<" possiede:" << "\n";
 
         std::cout << "\t" << "Alberghi nelle posizioni: ";
-        for (auto j : i.get_hotels())   std::cout << j << " ";
+        for (auto j : i->get_hotels())  std::cout << j << " ";
 
         std::cout << "\n" << "\t" << "Case nelle posizioni: ";
-        for (auto j : i.get_houses())   std::cout << j << " ";
+        for (auto j : i->get_houses())   std::cout << j << " ";
 
         std::cout << "\n" << "\t" << "Terreni vuoti nelle posizioni: ";
-        for (auto j : i.get_lands())    std::cout << j << " ";
+        for (auto j : i->get_lands())    std::cout << j << " ";
     }
 
     //stampo i fiorini di ciascun giocatore
     std::cout << "\n" << "La situazione economica di ciascun giocatore è la seguente: " << "\n";
-    for (auto& i : players){
-        std::cout << "\t" << i.get_name() <<" ha " << i.get_budget() << "fiorini" << "\n";
+    for (auto i : players){
+        std::cout << "\t" << i->get_name() <<" ha " << i->get_budget() << "fiorini" << "\n";
     }
     std::cout << "\n";
 }

@@ -1,13 +1,13 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include "player.cpp"
+#include "player.h"
 
 class CPUPlayer: public Player{
 
     public:
-        CPUPlayer() : Player(){};
-        CPUPlayer(std::string name) : Player(){     name = "CPU"+name;};
+        CPUPlayer() : Player(){     name = "CPU" + name;};
+        CPUPlayer(std::string word) : Player(){     name = word;};
 
         virtual bool interactions(){    return false;};
         virtual purchase buy_land(int cost);

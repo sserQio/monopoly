@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <random>
+
 class Player;
 
 class Board{
@@ -44,7 +45,7 @@ class Board{
     //const std::vector<char> letters = {'E', 'S', 'L'};
     const char box_types[3] = {'E', 'S', 'L'};
 
-    std::vector<Player> players = std::vector<Player>(players_number);
+    std::vector<Player*> players = std::vector<Player*>(players_number);
 
     // -- FUNZIONI PRIVATE --
 
