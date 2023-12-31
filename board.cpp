@@ -4,7 +4,7 @@
 
 //   ---  COSTRUTTORI  ---
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
-    : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6) {
+    : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1) {
     players.at(0) = p1;
     players.at(1) = p2;
     players.at(2) = p3;
@@ -16,6 +16,10 @@ Board::Board(Player& p1, Player& p2, Player& p3, Player& p4)
 
 void Board::set_output_file(std::string name){ 
     file_name = name;
+}
+
+void Board::set_total_turns(int n){
+    max_turn_number = n;
 }
 
 int Board::get_height(){    return HEIGHT;}
@@ -162,6 +166,48 @@ bool Board::next(){
         std::cout << name << " ha vinto la partita" << "\n"; 
 
         return true; 
+    }
+
+    if (max_turn_number == 0){
+        int budget = player.get_budget();
+        for (int i = 0; i < players_number; i++){
+            int n = players.at(i).get_budget();
+            if (n < budget){
+                players.erase(players.begin()+i);
+                players_number--;
+            }
+            else if (n > budget){
+                player = players.at(i); //il nuovo riferimento è il giocatore con il budget maggiore
+                players.erase(players.begin() + turn);
+                turn = i; //utile in caso si trovi un altro giocatore con budget maggiore
+                players_number--;
+                //se ci fossero giocatori precedentemente salvati in fondo al vettore perché con budget uguale, li rimuovo
+                while (players.back().get_budget() == budget){
+                    players.pop_back();
+                    players_number--;
+                }
+                budget = n;
+            }
+            else{ //sono uguali: mantengo entrambi i giocatori in lista perché vinceranno parimerito
+
+                //salvo i giocatori con budget uguale in coda al vettore per un eventuale rimozione più semplice
+                players.push_back(players.at(i)); 
+                players.erase(players.begin() + i);
+            }
+        }
+        if (players_number != 1){
+            output_file << "Raggiunto il limite di turni. I vincitori, a parimerito con " << budget << " fiorini, sono: " << "\n";
+            std::cout << "Raggiunto il limite di turni. I vincitori, a parimerito con " << budget << " fiorini, sono: " << "\n";
+        }
+        else{
+            output_file << "Raggiunto il limite di turni. Il vincitore per maggior numero di fiorini (" << budget << ") è:";
+            std::cout  << "Raggiunto il limite di turni. Il vincitore per maggior numero di fiorini (" << budget << ") è:";
+        }
+        for(auto& i : players){
+            output_file << "\t" << i.get_name() << "\n";
+            std::cout << "\t" << i.get_name() << "\n";
+        }
+        return true;
     }
 
     if (turn >= players_number)     turn = 0;
@@ -393,6 +439,7 @@ bool Board::next(){
     std::cout << name << " termina il turno" << "\n" << "\n";
     output_file.close();
     turn++;
+    if (max_turn_number != -1)  max_turn_number--;
 
     return false;
 }

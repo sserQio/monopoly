@@ -16,6 +16,7 @@ class Board{
 
     int players_number;
     int turn;
+    int max_turn_number;
 
     const char house = '*';
     const char hotel = '^';
@@ -58,6 +59,7 @@ class Board{
         Board(Player& p1, Player& p2, Player& p3, Player& p4);
 
         void set_output_file(std::string file);
+        void set_total_turns(int n);
     
         int get_height();
         int get_width();
