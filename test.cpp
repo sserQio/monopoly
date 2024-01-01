@@ -5,9 +5,7 @@
 
 int main(){
 
-    std::string input;
-    std::getline(std::cin, input);
-    if (input == "\n")     return 0;
-    std::cout << input <<"\n";
+    std::string c1 = "3142";
+    std::cout << int(c1[3] - '0') << "\n";
     return 0;
 }

@@ -3,11 +3,13 @@
 
 //   ---  COSTRUTTORI  ---
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
-    : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1) {
+    : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), state(false) {
     players.at(0) = &p1;
     players.at(1) = &p2;
     players.at(2) = &p3;
     players.at(3) = &p4;
+    //Oltre all'eventuale nome personalizzato, aggiungo un numero identificativo ai giocatori
+    for(int i = 0; i < players_number; i++)     players.at(i)->set_name(players.at(i)->get_name() +" ("+ std::to_string(i+1) + ")");
     fill_board();
 }
 
@@ -69,30 +71,29 @@ void Board::p_order(){
     std::cout << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
 
     std::vector<std::string> dice_throws (players_number);
+    std::vector<Player*> temp(4);
+    srand(time(0));
     for (int i = 0; i < players_number; i++){
         std::string n = std::to_string((*players.at(i)).throw_dice());
         output_file << players.at(i)->get_name() << " tira i dadi: " << n <<"\n";
         std::cout << players.at(i)->get_name() << " tira i dadi: " << n <<"\n";
         //uso stringhe per poter etichettare a ciascun lancio l'indice del giocatore
         dice_throws.at(i) = std::to_string(i) + n; 
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
     std::sort(dice_throws.begin(), dice_throws.end(), compare_throws);
     
     //riordino il vector di giocatori nel modo corretto, stabilito dal lancio dei dadi
     for (int i = 0; i < players_number - 1; i++){
         if (dice_throws.at(i).substr(1) != dice_throws.at(i+1).substr(1)){ //i valori dei lanci dono diversi
-            std::swap(players.at(i), players.at(std::stoi(dice_throws.at(i).substr(0,1))));
+
+            temp.at(i) = players.at(std::stoi(dice_throws.at(i).substr(0,1)));
             //(il primo elemento di dice_throws contiene l'etichetta del giocatore che giocherà per primo)
-            
-            //Inserisco un elemento identificativo dell'ordine anche nel nome del giocatore
-            players.at(i)->set_name(players.at(i)->get_name()+" ("+std::to_string(i+1)+"°)");
         }
         else{ //sono in una sezione della lista di lanci ove ho ottenuto valori uguali: devo rilanciare
             
-            output_file << "In " << i+1 << "° posizione vi sono giocatori in parimerito." << "\n";
-            output_file << "Si procede con il rilancio dei dadi per quest'ultimi" <<"\n";
-            std::cout << "In " << i+1 << "° posizione vi sono giocatori in parimerito." << "\n";
-            std::cout << "Si procede con il rilancio dei dadi per quest'ultimi" <<"\n";
+            output_file << "In " << i+1 << "° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi" << "\n";
+            std::cout << "In " << i+1 << "° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi" << "\n";
 
             bool done = false;
             int c = i;
@@ -100,27 +101,31 @@ void Board::p_order(){
                 int value = std::stoi(dice_throws.at(c).substr(1));
     
                 //ritiro i dadi finché sono in tale sezione della lista (di lanci uguali)
-                std::string n = std::to_string((*players.at(c)).throw_dice());
+                std::string n = std::to_string(players.at(std::stoi(dice_throws.at(c).substr(0,1)))->throw_dice());
 
-                output_file << players.at(c)->get_name() << "ritira: " << n << "\n";
-                std::cout << players.at(c)->get_name() << "ritira: " << n << "\n";
-                
+                output_file << players.at(std::stoi(dice_throws.at(c).substr(0,1)))->get_name() << " ritira: " << n << "\n";
+                std::cout << players.at(std::stoi(dice_throws.at(c).substr(0,1)))->get_name() << " ritira: " << n << "\n";
                 dice_throws.at(c) = dice_throws.at(c)[0] + n;
 
-                while(std::stoi(dice_throws.at(c++).substr(1)) == value){
-                    std::string n = std::to_string(players.at(c)->throw_dice());
+                //per una migliore visualizzazione e funzionamento della pseudo-randomicità dei lanci
+                //aspetto mezzo secondo prima di rilanciare
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-                    output_file << players.at(c)->get_name() << "ritira: " << n << "\n";
-                    std::cout << players.at(c)->get_name() << "ritira: " << n << "\n";
+                while(c < players_number-1 && std::stoi(dice_throws.at(c+1).substr(1)) == value){
+                    c++;
+                    int j = std::stoi(dice_throws.at(c).substr(0,1));
+                    std::string n = std::to_string(players.at(j)->throw_dice());
+
+                    output_file << players.at(j)->get_name() << " ritira: " << n << "\n";
+                    std::cout << players.at(j)->get_name() << " ritira: " << n << "\n";
 
                     dice_throws.at(c) = dice_throws.at(c)[0] + n;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 }
-                c--;
                 //riordino quella porzione di lista secondo i nuovi lanci
                 std::sort(dice_throws.begin()+i, dice_throws.end()-c, compare_throws);
 
                 done = true; //assumiamo di aver finito
-
                 //controllo se ci sono ancora lanci uguali ed eventualmente reitero
                 for (int j = i; j < c; j++){
                     if (dice_throws.at(j).substr(1) == dice_throws.at(j+1).substr(1)){
@@ -134,28 +139,34 @@ void Board::p_order(){
                 }
             }
             i--;
-        }   
-        
+        }
+        temp.at(players_number-1) = players.at(std::stoi(dice_throws.at(players_number-1).substr(0,1)));
     }
-    //manca il nome aggiornato all'ultimo player
-    (players.at(players_number-1))->set_name((players.at(players_number-1))->get_name()+" ("+std::to_string((players_number-1))+"°)");
-
-    //stampo l'ordine di gioco
+    //stampo l'ordine di gioco, sistemando man mano l'array di giocatori
     output_file << "\n" <<"Si gioca nell'ordine: ";
     std::cout << "\n" <<"Si gioca nell'ordine: ";
+
+    players.swap(temp);
     output_file << players.at(0)->get_name();
     std::cout << players.at(0)->get_name();
-    for (int i = 0; i < players_number; i++){
+
+    for (int i = 1; i < players_number; i++){
         output_file << ", " << players.at(i)->get_name();
         std::cout << ", " << players.at(i)->get_name();
     }
     output_file << "\n" << "\n";
     std::cout << "\n" << "\n";
     output_file.close();
+    state = true; //l'ordine è stabilito: la partita può iniziare
 }
 
 //gestione del turno di un giocatore: AGGIUNGERE OPZIONE "show()"
 bool Board::next(){
+    //Se è la prima giocata, devo stabilire l'ordine di gioco
+    if (state == false){
+        p_order();
+    }
+
     output_file.open(file_name);
     Player& player = *players.at(turn);
     std::string name = player.get_name();

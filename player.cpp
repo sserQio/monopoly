@@ -6,7 +6,7 @@
 //   ---  FUNZIONI DI GIOCO  ---
 
 int Player::throw_dice(){
-    srand(time(0));
+    //srand(time(0));
     return ((rand()%6)+1 + (rand()%6)+1);
 }
 

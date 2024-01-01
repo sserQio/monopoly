@@ -3,7 +3,8 @@
 
 #include <fstream>
 #include <algorithm>
-#include <random>
+#include <chrono>
+#include <thread>
 
 class Player;
 
@@ -18,6 +19,7 @@ class Board{
     int players_number;
     int turn;
     int max_turn_number;
+    bool state; //sarà false all'inizio: la partita non è incominciata
 
     const char house = '*';
     const char hotel = '^';
