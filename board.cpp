@@ -71,7 +71,8 @@ void Board::p_order(){
     std::cout << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
 
     std::vector<std::string> dice_throws (players_number);
-    std::vector<Player*> temp(4);
+    std::vector<Player*> temp = players;
+
     srand(time(0));
     for (int i = 0; i < players_number; i++){
         std::string n = std::to_string((*players.at(i)).throw_dice());
@@ -87,8 +88,9 @@ void Board::p_order(){
     for (int i = 0; i < players_number - 1; i++){
         if (dice_throws.at(i).substr(1) != dice_throws.at(i+1).substr(1)){ //i valori dei lanci dono diversi
 
-            temp.at(i) = players.at(std::stoi(dice_throws.at(i).substr(0,1)));
+            players.at(i) = temp.at(std::stoi(dice_throws.at(i).substr(0,1)));
             //(il primo elemento di dice_throws contiene l'etichetta del giocatore che giocherà per primo)
+
         }
         else{ //sono in una sezione della lista di lanci ove ho ottenuto valori uguali: devo rilanciare
             
@@ -101,10 +103,10 @@ void Board::p_order(){
                 int value = std::stoi(dice_throws.at(c).substr(1));
     
                 //ritiro i dadi finché sono in tale sezione della lista (di lanci uguali)
-                std::string n = std::to_string(players.at(std::stoi(dice_throws.at(c).substr(0,1)))->throw_dice());
+                std::string n = std::to_string(temp.at(std::stoi(dice_throws.at(c).substr(0,1)))->throw_dice());
 
-                output_file << players.at(std::stoi(dice_throws.at(c).substr(0,1)))->get_name() << " ritira: " << n << "\n";
-                std::cout << players.at(std::stoi(dice_throws.at(c).substr(0,1)))->get_name() << " ritira: " << n << "\n";
+                output_file << temp.at(std::stoi(dice_throws.at(c).substr(0,1)))->get_name() << " ritira: " << n << "\n";
+                std::cout << temp.at(std::stoi(dice_throws.at(c).substr(0,1)))->get_name() << " ritira: " << n << "\n";
                 dice_throws.at(c) = dice_throws.at(c)[0] + n;
 
                 //per una migliore visualizzazione e funzionamento della pseudo-randomicità dei lanci
@@ -114,21 +116,22 @@ void Board::p_order(){
                 while(c < players_number-1 && std::stoi(dice_throws.at(c+1).substr(1)) == value){
                     c++;
                     int j = std::stoi(dice_throws.at(c).substr(0,1));
-                    std::string n = std::to_string(players.at(j)->throw_dice());
+                    std::string n = std::to_string(temp.at(j)->throw_dice());
 
-                    output_file << players.at(j)->get_name() << " ritira: " << n << "\n";
-                    std::cout << players.at(j)->get_name() << " ritira: " << n << "\n";
+                    output_file << temp.at(j)->get_name() << " ritira: " << n << "\n";
+                    std::cout << temp.at(j)->get_name() << " ritira: " << n << "\n";
 
                     dice_throws.at(c) = dice_throws.at(c)[0] + n;
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 }
                 //riordino quella porzione di lista secondo i nuovi lanci
-                std::sort(dice_throws.begin()+i, dice_throws.end()-c, compare_throws);
-
+                std::sort(dice_throws.begin()+i, dice_throws.begin()+c+1, compare_throws);
+                for (auto i : dice_throws)  std::cout << i << "\n";
                 done = true; //assumiamo di aver finito
                 //controllo se ci sono ancora lanci uguali ed eventualmente reitero
                 for (int j = i; j < c; j++){
                     if (dice_throws.at(j).substr(1) == dice_throws.at(j+1).substr(1)){
+
                         output_file << "Vi sono ancora pareggi per la " << j+1 << "° posizione: reitero" <<"\n";
                         std::cout << "Vi sono ancora pareggi per la " << j+1 << "° posizione: reitero" <<"\n";
 
@@ -138,15 +141,19 @@ void Board::p_order(){
                     }   
                 }
             }
+            //inibisco il valore contenuto nel player nell'ultima posizione che conteneva un valore uguale
+            //altrimenti rischio che il valore ottenuto rilanciando risulti uguale al valore ottenuto precedentemente dal giocatore successivo
+            dice_throws.at(c)[1] = '0'; 
+            //riparto dallo stesso giocatore da cui era partita la sezione di lanci uguali (così che venga propriamente inserito in players)
             i--;
         }
-        temp.at(players_number-1) = players.at(std::stoi(dice_throws.at(players_number-1).substr(0,1)));
     }
+    players.at(players_number-1) = temp.at(std::stoi(dice_throws.at(players_number-1).substr(0,1)));
+
     //stampo l'ordine di gioco, sistemando man mano l'array di giocatori
     output_file << "\n" <<"Si gioca nell'ordine: ";
     std::cout << "\n" <<"Si gioca nell'ordine: ";
 
-    players.swap(temp);
     output_file << players.at(0)->get_name();
     std::cout << players.at(0)->get_name();
 

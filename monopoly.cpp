@@ -57,7 +57,11 @@ int main(int argc, char* argv[]){
     if (type.length() != 0)   board.set_output_file(type);
 
     bool done = false;
-    while (!done)   done = board.next();
+    while (!done){
+        done = board.next();
+        std::cout << "Continuare [ENTER] ";
+        std::getline(std::cin, type);
+    }
 
     delete p1;
     return 0;
