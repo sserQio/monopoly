@@ -12,9 +12,9 @@ class Board{
     const int HEIGHT = 8;
     const int WIDTH = 8;
 
-    int n_economy;
-    int n_standard;
-    int n_luxurious;
+    int n_economy = 8;
+    int n_standard = 10;
+    int n_luxurious = 6;
 
     int players_number;
     int turn;
@@ -93,14 +93,14 @@ std::string to_string(Board::rows c);
 #endif //BOARD_H
 
 /*
-      1        2        3        4        5        6        7        8
-A: |      | |      | |      | |      | |      | |      | |      | |      |
-B: |      | |                                                     |      |
-C: |      | |                                                     |      |
-D: |      | |                                                     |      |
-E: |      | |                                                     |      |
-F: |      | |                                                     |      |
-G: |      | |                                                     |      |
-H: |      | |      | |      | |      | |      | |      | |      | |      |
+        1           2           3           4           5           6           7           8
+A  | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 |
+B  |        | |                                                     |      |
+C  |        | |                                                     |      |
+D  |        | |                                                     |      |
+E  |        | |                                                     |      |
+F  |        | |                                                     |      |
+G  |        | |                                                     |      |
+H  |        | |      | |      | |      | |      | |      | |      | |   S  |
 
 */

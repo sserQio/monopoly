@@ -2,6 +2,7 @@
 #include "player.cpp"
 
 //   ---  COSTRUTTORI  ---
+
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
     : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), state(false) {
     players.at(0) = &p1;
@@ -32,18 +33,18 @@ int Board::start_increment(){   return through_start;}
 
 //creazione casuale del tabellone
 void Board::fill_board(){
-    //valutare se fare manualmente perché non so se possiamo usarlo
-    //auto rng = std::default_random_engine {};
-    //std::shuffle(std::begin(letters), std::end(letters), rng); // si mescolano gli elementi del vettore letters (i gradi dei terreni)
-
     // riempimento della tabella
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
-            if ((x == 0 && y == 0) || (x == 7 && y==0) ||(x==7 && y==7) ||(x==0 && y==7)){continue;}
-            if ((x>1 && x<7) && (y>1 && y<7)){continue;}
+            if (x == 0 && y == 0){board[x][y].on_box = "| P |"; board[x][y].index = -1;}
+            else if ((x == WIDTH-1 && y == 0) ||(x == WIDTH-1 && y == HEIGHT-1) ||(x == 0 && y == HEIGHT-1)){board[x][y].on_box = "|   |"; board[x][y].index = -1;}
+            else if ((x > WIDTH-(WIDTH-1) && x < WIDTH-1) && (y > HEIGHT-(HEIGHT-1) && y < HEIGHT-1)){continue;}
             else {
-                //board[x][y].on_box = letters.back();
-                //letters.pop_back();
+                int t = rand()%3;
+                if (t == 0 && n_economy > 0){board[x][y].on_box = "| E |"; board[x][y].index = -1; n_economy--;}
+                else if (t == 1 && n_standard > 0){board[x][y].on_box = "| S |"; board[x][y].index = -1; n_standard--;}
+                else if (t == 2 && n_luxurious > 0){board[x][y].on_box = "| L |"; board[x][y].index = -1; n_luxurious--;}
+                else {y--;}
             }
         }
     }
@@ -59,7 +60,18 @@ int Board::whose_property(int* pos){
 
 //stampa a terminale del tabellone corrente
 void Board::print_board(){
-    
+    std::vector<std::string> lines {"A", "B", "C", "D", "E", "F", "G", "H"};
+    int max_length = 9;
+    std::cout<< "        1           2           3           4           5           6           7           8\n";
+    for (int x = 0; x < WIDTH; x++){
+        std::cout<< lines[x] + "  ";
+        for (int y = 0; y < HEIGHT; y++){
+            int spaces = max_length-(board[x][y].on_box.length());
+            std::cout<< "|" + std::string((spaces/2), ' ') + board[x][y].on_box + std::string(spaces-(spaces/2), ' ') + "|";
+        }
+        std::cout<< "\n";
+    }
+    std::cout<< "\n";
 }
 
 //   ---  FUNZIONI DI GIOCO  ---
