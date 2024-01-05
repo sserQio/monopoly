@@ -1,11 +1,13 @@
-#include <iostream>
-#include <cstdlib> 
-#include <ctime>
+#include "board.cpp"
+#include "cpuplayer.cpp"
+#include "humanplayer.cpp"
 
 
 int main(){
 
-    std::string c1 = "3142";
-    std::cout << int(c1[3] - '0') << "\n";
+    Player p1, p2, p3, p4;
+    Board board(p1,p2,p3,p4);
+    board.next();
+    board.print_board();
     return 0;
 }

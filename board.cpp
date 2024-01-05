@@ -36,15 +36,34 @@ void Board::fill_board(){
     // riempimento della tabella
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
-            if (x == 0 && y == 0){board[x][y].on_box = "| P |"; board[x][y].index = -1;}
-            else if ((x == WIDTH-1 && y == 0) ||(x == WIDTH-1 && y == HEIGHT-1) ||(x == 0 && y == HEIGHT-1)){board[x][y].on_box = "|   |"; board[x][y].index = -1;}
-            else if ((x > WIDTH-(WIDTH-1) && x < WIDTH-1) && (y > HEIGHT-(HEIGHT-1) && y < HEIGHT-1)){continue;}
+
+            if (x == 0 && y == 0){  
+                board[x][y].on_box = "| P |"; 
+                board[x][y].index = -1;
+            }
+            else if ((x == WIDTH-1 && y == 0) ||(x == WIDTH-1 && y == HEIGHT-1) ||(x == 0 && y == HEIGHT-1)){
+                board[x][y].on_box = "|   |"; 
+                board[x][y].index = -1;
+            }
+            else if ((x > 0 && x < WIDTH-1) && (y > 0 && y < HEIGHT-1))   continue;
             else {
                 int t = rand()%3;
-                if (t == 0 && n_economy > 0){board[x][y].on_box = "| E |"; board[x][y].index = -1; n_economy--;}
-                else if (t == 1 && n_standard > 0){board[x][y].on_box = "| S |"; board[x][y].index = -1; n_standard--;}
-                else if (t == 2 && n_luxurious > 0){board[x][y].on_box = "| L |"; board[x][y].index = -1; n_luxurious--;}
-                else {y--;}
+                if (t == 0 && n_economy > 0){
+                    board[x][y].on_box = "| E |"; 
+                    board[x][y].index = -1; 
+                    n_economy--;
+                }
+                else if (t == 1 && n_standard > 0){
+                    board[x][y].on_box = "| S |"; 
+                    board[x][y].index = -1; 
+                    n_standard--;
+                }
+                else if (t == 2 && n_luxurious > 0){
+                    board[x][y].on_box = "| L |"; 
+                    board[x][y].index = -1; 
+                    n_luxurious--;
+                }
+                else {  y--;}
             }
         }
     }
@@ -60,16 +79,42 @@ int Board::whose_property(int* pos){
 
 //stampa a terminale del tabellone corrente
 void Board::print_board(){
-    std::vector<std::string> lines {"A", "B", "C", "D", "E", "F", "G", "H"};
-    int max_length = 9;
-    std::cout<< "        1           2           3           4           5           6           7           8\n";
-    for (int x = 0; x < WIDTH; x++){
-        std::cout<< lines[x] + "  ";
-        for (int y = 0; y < HEIGHT; y++){
-            int spaces = max_length-(board[x][y].on_box.length());
-            std::cout<< "|" + std::string((spaces/2), ' ') + board[x][y].on_box + std::string(spaces-(spaces/2), ' ') + "|";
+    std::cout << "\n";
+    std::string spaces = "";
+    std::string standard_space = " "; // lo spazio per l'eventuale presenza di una casa o albergo
+
+    //devo prevedere l'eventuale presenza di tutti i giocatori, così che la casella non vada a sovrapporsi
+    //con la successiva a causa di un distanziamento troppo piccolo
+    for(int i = 0; i < players_number; i++){
+        standard_space+=" ";
+    }
+
+    for (int i = 2; i < WIDTH; i++){
+        spaces += "     " + standard_space; //l'ampiezza necessaria per una casella standard "| E |" e il distanziamento dalla successiva
+    }
+    
+    //stampo la prima riga con le coordinate delle colonne
+    std::cout << "     ";
+    for (int i = 1; i <= WIDTH; i++){
+        std::cout<< i << "    " + standard_space; //così che sia sempre sopra il "tipo di casella"
+    }
+    std::cout << "\n";
+    std::cout << "\n";
+
+    for (int y = 0; y < HEIGHT; y++){
+        std::cout << to_string(rows(y)) << "  ";
+
+        for (int x = 0; x < WIDTH; x++){
+            std::string space = standard_space;
+            for (int i = board[y][x].on_box.length(); i > 5; i--)    space[i - space.length()] = '\0';
+            std::cout << board[y][x].on_box << space;
+            if (y > 0 && y < HEIGHT-1){
+                std::cout << spaces << board[y][WIDTH-1].on_box;
+                x = WIDTH-1;
+            }
         }
-        std::cout<< "\n";
+        std::cout << "\n";
+        std::cout << "\n";
     }
     std::cout<< "\n";
 }
@@ -138,7 +183,7 @@ void Board::p_order(){
                 }
                 //riordino quella porzione di lista secondo i nuovi lanci
                 std::sort(dice_throws.begin()+i, dice_throws.begin()+c+1, compare_throws);
-                for (auto i : dice_throws)  std::cout << i << "\n";
+
                 done = true; //assumiamo di aver finito
                 //controllo se ci sono ancora lanci uguali ed eventualmente reitero
                 for (int j = i; j < c; j++){
@@ -184,6 +229,17 @@ bool Board::next(){
     //Se è la prima giocata, devo stabilire l'ordine di gioco
     if (state == false){
         p_order();
+
+        //inserisco i giocatori nella casella di partenza
+        for (auto i : players){
+
+            int * player_pos = i -> get_pos();
+            int n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
+            //elimino i caratteri " |"
+            board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
+            board[player_pos[0]][player_pos[1]].on_box[n-2] = '\0';
+            board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + " |";
+        }
     }
 
     output_file.open(file_name);
@@ -253,15 +309,15 @@ bool Board::next(){
 
     //rimuovo il player dalla sua posizione attuale nel tabellone
     int* player_pos = player.get_pos();
-    for (int i = 0; i < board[player_pos[0]][player_pos[1]].on_box.length(); i++){
+    for (int i = 2; i < board[player_pos[0]][player_pos[1]].on_box.length(); i++){ //Sarà sempre almeno dalla posizione 2 per: "| "
         if (board[player_pos[0]][player_pos[1]].on_box[i] == *std::to_string(turn).c_str()){
             board[player_pos[0]][player_pos[1]].on_box[i] = '\0';
         }
     }
-
     //controllo se sono passato per il via
     int prev_budget = player.get_budget();
     player.move(*this, n);
+    std::cout << "ok" << "\n";
     if (player.get_budget() == prev_budget + through_start){
         output_file << name << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
         std::cout << name << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
@@ -269,8 +325,10 @@ bool Board::next(){
 
     //aggiungo il player nel tabellone
     n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
+    //elimino i caratteri " |"
     board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
-    board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + '|';
+    board[player_pos[0]][player_pos[1]].on_box[n-2] = '\0';
+    board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + " |";
 
     //verifico in che cella mi trovo e agisco di conseguenza
     player_pos = player.get_pos();
