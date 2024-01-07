@@ -233,14 +233,16 @@ bool Board::next(){
         //inserisco i giocatori nella casella di partenza
         for (auto i : players){
 
-            int * player_pos = i -> get_pos();
-            int n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
+            int* player_pos = i -> get_pos();
+            int n = board[player_pos[0]][player_pos[1]].on_box.length(); 
             //elimino i caratteri " |"
             board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
             board[player_pos[0]][player_pos[1]].on_box[n-2] = '\0';
             board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + " |";
         }
     }
+
+    if (turn >= players_number)     turn = 0;
 
     output_file.open(file_name);
     Player& player = *players.at(turn);
@@ -294,7 +296,7 @@ bool Board::next(){
         }
         return true;
     }
-    if (turn >= players_number)     turn = 0;
+
     output_file << "È il turno di " << name << "\n";
     std::cout << "È il turno di " << name << "\n";
 
@@ -303,6 +305,7 @@ bool Board::next(){
     bool interaction = player.interactions();
     if (interaction)    show_options();
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     int n = player.throw_dice();
     output_file << name << " tira i dadi: " << n <<"\n";
     std::cout << name << " tira i dadi: " << n <<"\n";
@@ -314,13 +317,16 @@ bool Board::next(){
             board[player_pos[0]][player_pos[1]].on_box[i] = '\0';
         }
     }
+
     //controllo se sono passato per il via
     int prev_budget = player.get_budget();
     player.move(*this, n);
-    std::cout << "ok" << "\n";
+
     if (player.get_budget() == prev_budget + through_start){
-        output_file << name << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
-        std::cout << name << " passa per il via e ritira" << through_start << "fiorini" <<"\n";
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        output_file << name << " passa per il via e ritira " << through_start << "fiorini" <<"\n";
+        std::cout << name << " passa per il via e ritira " << through_start << "fiorini" <<"\n";
     }
 
     //aggiungo il player nel tabellone
@@ -330,6 +336,7 @@ bool Board::next(){
     board[player_pos[0]][player_pos[1]].on_box[n-2] = '\0';
     board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + " |";
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     //verifico in che cella mi trovo e agisco di conseguenza
     player_pos = player.get_pos();
     output_file << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
@@ -343,6 +350,8 @@ bool Board::next(){
 
         Player::purchase done = Player::purchase::NOT_DONE;
         //Il terreno è libero
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         if (i == -1){
             output_file << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
             std::cout << "Il terreno è libero, procedo con verifiche per l'eventuale acquisto" << "\n";
@@ -354,8 +363,10 @@ bool Board::next(){
             
                 done = player.buy_land(economic_land);
                 if (done == Player::purchase::DONE){
-                    output_file << name << "compra il terreno per " << economic_land << "fiorini" <<"\n"; 
-                    std::cout << name << "compra il terreno per " << economic_land << "fiorini" <<"\n";
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                    output_file << name << " compra il terreno per " << economic_land << "fiorini" <<"\n"; 
+                    std::cout << name << " compra il terreno per " << economic_land << "fiorini" <<"\n";
 
                     board[player_pos[0]][player_pos[1]].index = turn;
                 }
@@ -364,8 +375,10 @@ bool Board::next(){
 
                 done = player.buy_land(standard_land);
                 if (done == Player::purchase::DONE){
-                    output_file << name << "compra il terreno per " << standard_land << "fiorini" <<"\n"; 
-                    std::cout << name << "compra il terreno per " << standard_land << "fiorini" <<"\n";
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                    output_file << name << " compra il terreno per " << standard_land << "fiorini" <<"\n"; 
+                    std::cout << name << " compra il terreno per " << standard_land << "fiorini" <<"\n";
 
                     board[player_pos[0]][player_pos[1]].index = turn;
                 }
@@ -374,20 +387,26 @@ bool Board::next(){
 
                 done = player.buy_land(luxurious_land);
                 if (done == Player::purchase::DONE){
-                    output_file << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
-                    std::cout << name << "compra il terreno per " << luxurious_land << "fiorini" <<"\n";
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                    output_file << name << " compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
+                    std::cout << name << " compra il terreno per " << luxurious_land << "fiorini" <<"\n";
 
                     board[player_pos[0]][player_pos[1]].index = turn;
                 }
             }
 
             if (done == Player::purchase::OUT_OF_BALANCE){
-                output_file << name << "non ha fondi sufficienti per comprare il terreno " << "\n"; 
-                std::cout << name << "non ha fondi sufficienti per comprare il terreno " << "\n";
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                output_file << name << " non ha fondi sufficienti per comprare il terreno " << "\n"; 
+                std::cout << name << " non ha fondi sufficienti per comprare il terreno " << "\n";
             }
             else if (done == Player::purchase::NOT_DONE){
-                output_file << name << "non compra il terreno " << "\n"; 
-                std::cout << name << "non compra il terreno " << "\n";
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                output_file << name << " non compra il terreno " << "\n"; 
+                std::cout << name << " non compra il terreno " << "\n";
             }
         }
 
@@ -403,6 +422,8 @@ bool Board::next(){
 
                 done = player.buy_house(economic_house);
                 if (done == Player::purchase::DONE){
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                     output_file << name << "compra una casa per " << economic_house << "fiorini" <<"\n"; 
                     std::cout << name << "compra una casa per " << economic_house << "fiorini" <<"\n";
                 }
@@ -411,6 +432,8 @@ bool Board::next(){
 
                 done = player.buy_house(standard_house);
                 if (done == Player::purchase::DONE){
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                     output_file << name << "compra una casa per " << standard_house << "fiorini" <<"\n"; 
                     std::cout << name << "compra una casa per " << standard_house << "fiorini" <<"\n";
                 }
@@ -419,16 +442,22 @@ bool Board::next(){
 
                 done = player.buy_house(luxurious_house);
                 if (done == Player::purchase::DONE){
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                     output_file << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n"; 
                     std::cout << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n";
                 }
             }
 
             if (done == Player::purchase::OUT_OF_BALANCE){
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 output_file << name << "non ha fondi sufficienti per investire in una casa " << "\n"; 
                 std::cout << name << "non ha fondi sufficienti per investire in una casa " << "\n";
             }
             else if (done == Player::purchase::NOT_DONE){
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 output_file << name << "non investe in una casa " << "\n"; 
                 std::cout << name << "non investe in una casa " << "\n";
             }
@@ -446,6 +475,8 @@ bool Board::next(){
 
                 done = player.buy_hotel(economic_hotel);
                 if (done == Player::purchase::DONE){
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                     output_file << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
                     std::cout << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n";
                 }
@@ -454,6 +485,8 @@ bool Board::next(){
 
                 done = player.buy_hotel(standard_hotel);
                 if (done == Player::purchase::DONE){
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                     output_file << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
                     std::cout << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n";
                 }
@@ -462,16 +495,22 @@ bool Board::next(){
 
                 done = player.buy_hotel(luxurious_hotel);
                 if (done == Player::purchase::DONE){
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                     output_file << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
                     std::cout << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
                 }
             }
 
             if (done == Player::purchase::OUT_OF_BALANCE){
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 output_file << name << "non ha fondi sufficienti per investire in un hotel " << "\n"; 
                 std::cout << name << "non ha fondi sufficienti per investire in un hotel " << "\n";
             }
             else if (done == Player::purchase::NOT_DONE){
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 output_file << name << "non investe in un hotel " << "\n"; 
                 std::cout << name << "non investe in un hotel " << "\n";
             }
@@ -521,6 +560,7 @@ bool Board::next(){
     //ripropongo il menù
     if (interaction)    show_options();
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     output_file << name << " termina il turno" << "\n";
     std::cout << name << " termina il turno" << "\n" << "\n";
     output_file.close();
@@ -578,12 +618,14 @@ void Board::show(){
 
         std::cout << "\n" << "\t" << "Terreni vuoti nelle posizioni: ";
         for (auto j : i->get_lands())    std::cout << j << " ";
+
+        std::cout << "\n";
     }
 
     //stampo i fiorini di ciascun giocatore
     std::cout << "\n" << "La situazione economica di ciascun giocatore è la seguente: " << "\n";
     for (auto i : players){
-        std::cout << "\t" << i->get_name() <<" ha " << i->get_budget() << "fiorini" << "\n";
+        std::cout << "\t" << i->get_name() <<" ha " << i->get_budget() << " fiorini" << "\n";
     }
     std::cout << "\n";
 }

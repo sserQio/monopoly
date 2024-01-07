@@ -19,16 +19,6 @@ int main(int argc, char* argv[]){
     }
     if (type == "computer" || type == "Computer"){
 
-        std::cout << "Inserire numero massimo di round, o continuare [ENTER] per un assegnazione automatica: ";
-        //riciclo type
-        std::getline(std::cin, type);
-
-        if (type.length() == 0)   number_of_turns = 10;
-        else if (std::stoi(type) > 0)   number_of_turns = std::stoi(type);
-        else{
-            std::cout << "Valore non valido, procedo in automatico (10 turni)" << "\n";
-            number_of_turns = 10;
-        }
         p1 = new CPUPlayer();
     }
     else if (type == "human" || type == "Human"){
@@ -45,6 +35,18 @@ int main(int argc, char* argv[]){
         exit(0);
     }
 
+
+    std::cout << "Inserire numero massimo di round, o continuare [ENTER] per un assegnazione automatica: ";
+    //riciclo type
+    std::getline(std::cin, type);
+
+    if (type.length() == 0)   number_of_turns = 10;
+    else if (std::stoi(type) > 0)   number_of_turns = std::stoi(type);
+    else{
+        std::cout << "Valore non valido, procedo in automatico (10 turni)" << "\n";
+        number_of_turns = 10;
+    }
+
     CPUPlayer p2;
     CPUPlayer p3;
     CPUPlayer p4;
@@ -56,6 +58,7 @@ int main(int argc, char* argv[]){
 
     if (type.length() != 0)   board.set_output_file(type);
 
+    std::cout << "\n";
     bool done = false;
     while (!done){
         done = board.next();
