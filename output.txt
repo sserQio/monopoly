@@ -1,7 +1,0 @@
-È il turno di HumanPlayer (1)
-HumanPlayer (1) tira i dadi: 11
-HumanPlayer (1) passa per il via e ritira 20fiorini
-HumanPlayer (1) è arrivato nella casella E7
-Il terreno è libero, procedo con verifiche per l'eventuale acquisto
-HumanPlayer (1) non compra il terreno 
-HumanPlayer (1) termina il turno

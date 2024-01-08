@@ -19,6 +19,7 @@ class Board{
     int players_number;
     int turn;
     int max_turn_number;
+    int turn_count;
     bool state; //sarà false all'inizio: la partita non è incominciata
 
     const char house = '*';

@@ -4,7 +4,8 @@
 //   ---  COSTRUTTORI  ---
 
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
-    : file_name("output.txt"), turn (0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), state(false) {
+    : file_name("output.txt"), turn(0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), state(false), 
+        turn_count(0) {
     players.at(0) = &p1;
     players.at(1) = &p2;
     players.at(2) = &p3;
@@ -106,7 +107,18 @@ void Board::print_board(){
 
         for (int x = 0; x < WIDTH; x++){
             std::string space = standard_space;
-            for (int i = board[y][x].on_box.length(); i > 5; i--)    space[i - space.length()] = '\0';
+
+            int i = board[y][x].on_box.length();
+            if (i > standard_space.length()){
+                //space = standard_space.substr(0, i-standard_space.length());
+                std::string space2 (i - standard_space.length() -1, ' ');
+                space = space2;
+            }
+            /*for (int i = board[y][x].on_box.length(); i > 5; i--){
+                space[space.length()-j] = '\0';
+                j++;
+            }*/ 
+
             std::cout << board[y][x].on_box << space;
             if (y > 0 && y < HEIGHT-1){
                 std::cout << spaces << board[y][WIDTH-1].on_box;
@@ -123,6 +135,7 @@ void Board::print_board(){
 
 //stabilisce l'ordine di gioco tra i giocatori
 void Board::p_order(){
+    //std::ofstream output_file;
     output_file.open(file_name, std::ios::out);
     output_file << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
     std::cout << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
@@ -231,22 +244,23 @@ bool Board::next(){
         p_order();
 
         //inserisco i giocatori nella casella di partenza
-        for (auto i : players){
+        for (int i = 0; i < players_number; i++){
 
-            int* player_pos = i -> get_pos();
+            int* player_pos = players[i] -> get_pos();
             int n = board[player_pos[0]][player_pos[1]].on_box.length(); 
             //elimino i caratteri " |"
-            board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
-            board[player_pos[0]][player_pos[1]].on_box[n-2] = '\0';
-            board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + " |";
+            board[player_pos[0]][player_pos[1]].on_box = board[player_pos[0]][player_pos[1]].on_box.substr(0, n-2);
+            board[player_pos[0]][player_pos[1]].on_box += std::to_string(i+1) + " |";
         }
     }
 
     if (turn >= players_number)     turn = 0;
 
+    //std::ofstream output_file;
     output_file.open(file_name);
     Player& player = *players.at(turn);
     std::string name = player.get_name();
+    char player_index = name.at(name.length() - 2); //il numero che appare tra le parentesi
 
     if (players_number == 1){
         output_file << name << " ha vinto la partita" << "\n";
@@ -255,7 +269,7 @@ bool Board::next(){
         return true; 
     }
 
-    if (max_turn_number == 0){
+    if (max_turn_number == turn_count){
         int budget = player.get_budget();
         for (int i = 0; i < players_number; i++){
             int n = players.at(i)->get_budget();
@@ -313,8 +327,9 @@ bool Board::next(){
     //rimuovo il player dalla sua posizione attuale nel tabellone
     int* player_pos = player.get_pos();
     for (int i = 2; i < board[player_pos[0]][player_pos[1]].on_box.length(); i++){ //Sarà sempre almeno dalla posizione 2 per: "| "
-        if (board[player_pos[0]][player_pos[1]].on_box[i] == *std::to_string(turn).c_str()){
-            board[player_pos[0]][player_pos[1]].on_box[i] = '\0';
+        if (board[player_pos[0]][player_pos[1]].on_box[i] == *std::to_string(player_index).c_str()){
+            std::string::iterator j = board[player_pos[0]][player_pos[1]].on_box.begin() + i;
+            board[player_pos[0]][player_pos[1]].on_box.erase(j, j+1);
         }
     }
 
@@ -325,22 +340,24 @@ bool Board::next(){
     if (player.get_budget() == prev_budget + through_start){
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        output_file << name << " passa per il via e ritira " << through_start << "fiorini" <<"\n";
-        std::cout << name << " passa per il via e ritira " << through_start << "fiorini" <<"\n";
+        output_file << name << " passa per il via e ritira " << through_start << " fiorini" <<"\n";
+        std::cout << name << " passa per il via e ritira " << through_start << " fiorini" <<"\n";
     }
 
     //aggiungo il player nel tabellone
     n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
     //elimino i caratteri " |"
-    board[player_pos[0]][player_pos[1]].on_box[n-1] = '\0';
-    board[player_pos[0]][player_pos[1]].on_box[n-2] = '\0';
-    board[player_pos[0]][player_pos[1]].on_box += std::to_string(turn) + " |";
+    board[player_pos[0]][player_pos[1]].on_box = board[player_pos[0]][player_pos[1]].on_box.substr(0, n-2);
+
+    //se è un angolo    
+    if (board[player_pos[0]][player_pos[1]].on_box[3] == ' ')   board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.end()-1);
+    board[player_pos[0]][player_pos[1]].on_box += player_index + " |";
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     //verifico in che cella mi trovo e agisco di conseguenza
     player_pos = player.get_pos();
-    output_file << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
-    std::cout << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]) << "\n";
+    output_file << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]+1) << "\n";
+    std::cout << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]+1) << "\n";
 
     if (!((player_pos[0] == 0 || player_pos[0] == HEIGHT-1) && (player_pos[1] == 0 || player_pos[1] == WIDTH-1))){
         //(se non sono in un angolo del tabellone)
@@ -565,7 +582,7 @@ bool Board::next(){
     std::cout << name << " termina il turno" << "\n" << "\n";
     output_file.close();
     turn++;
-    if (max_turn_number != -1)  max_turn_number--;
+    turn_count++;
 
     return false;
 }
@@ -592,7 +609,7 @@ void Board::eliminate(int player_index){
 
 void Board::show_options(){
     std::string input;
-    std::cout << "Si digiti 'show' per visualizzare la situazione attuale della partita, o ENTER per continuare: ";
+    std::cout << "Si digiti 'show' per visualizzare la situazione attuale della partita, o [ENTER] per continuare: ";
     std::getline(std::cin, input);
 
     if (input == "show" || input == "'show'")   show();

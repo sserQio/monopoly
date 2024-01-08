@@ -1,13 +1,7 @@
-#include "board.cpp"
-#include "cpuplayer.cpp"
-#include "humanplayer.cpp"
-
-
+#include <iostream>
 int main(){
 
-    Player p1, p2, p3, p4;
-    Board board(p1,p2,p3,p4);
-    board.next();
-    board.print_board();
-    return 0;
+    std::string prova = "ciao";
+    prova.erase(prova.begin()+2, prova.begin()+2);
+    std::cout << prova;
 }
