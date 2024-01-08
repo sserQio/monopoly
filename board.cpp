@@ -4,8 +4,7 @@
 //   ---  COSTRUTTORI  ---
 
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
-    : file_name("output.txt"), turn(0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), state(false), 
-        turn_count(0) {
+    : file_name("output.txt"), turn(0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), turn_count(0) {
     players.at(0) = &p1;
     players.at(1) = &p2;
     players.at(2) = &p3;
@@ -70,7 +69,7 @@ void Board::fill_board(){
     }
 }
 
-bool Board::compare_throws(const std::string& throw1, const std::string& throw2){
+bool Board::compare(const std::string& throw1, const std::string& throw2){
     return std::stoi(throw1.substr(1)) > std::stoi(throw2.substr(1));
 }
 
@@ -111,13 +110,9 @@ void Board::print_board(){
             int i = board[y][x].on_box.length();
             if (i > standard_space.length()){
                 //space = standard_space.substr(0, i-standard_space.length());
-                std::string space2 (i - standard_space.length() -1, ' ');
+                std::string space2 (standard_space.length() - abs(((int)standard_space.length() )- i), ' ');
                 space = space2;
             }
-            /*for (int i = board[y][x].on_box.length(); i > 5; i--){
-                space[space.length()-j] = '\0';
-                j++;
-            }*/ 
 
             std::cout << board[y][x].on_box << space;
             if (y > 0 && y < HEIGHT-1){
@@ -135,7 +130,6 @@ void Board::print_board(){
 
 //stabilisce l'ordine di gioco tra i giocatori
 void Board::p_order(){
-    //std::ofstream output_file;
     output_file.open(file_name, std::ios::out);
     output_file << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
     std::cout << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
@@ -152,7 +146,7 @@ void Board::p_order(){
         dice_throws.at(i) = std::to_string(i) + n; 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
-    std::sort(dice_throws.begin(), dice_throws.end(), compare_throws);
+    std::sort(dice_throws.begin(), dice_throws.end(), compare);
     
     //riordino il vector di giocatori nel modo corretto, stabilito dal lancio dei dadi
     for (int i = 0; i < players_number - 1; i++){
@@ -195,7 +189,7 @@ void Board::p_order(){
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 }
                 //riordino quella porzione di lista secondo i nuovi lanci
-                std::sort(dice_throws.begin()+i, dice_throws.begin()+c+1, compare_throws);
+                std::sort(dice_throws.begin()+i, dice_throws.begin()+c+1, compare);
 
                 done = true; //assumiamo di aver finito
                 //controllo se ci sono ancora lanci uguali ed eventualmente reitero
@@ -234,13 +228,12 @@ void Board::p_order(){
     output_file << "\n" << "\n";
     std::cout << "\n" << "\n";
     output_file.close();
-    state = true; //l'ordine è stabilito: la partita può iniziare
 }
 
 //gestione del turno di un giocatore: AGGIUNGERE OPZIONE "show()"
 bool Board::next(){
     //Se è la prima giocata, devo stabilire l'ordine di gioco
-    if (state == false){
+    if (turn_count == 0){
         p_order();
 
         //inserisco i giocatori nella casella di partenza
@@ -256,11 +249,10 @@ bool Board::next(){
 
     if (turn >= players_number)     turn = 0;
 
-    //std::ofstream output_file;
     output_file.open(file_name);
     Player& player = *players.at(turn);
     std::string name = player.get_name();
-    char player_index = name.at(name.length() - 2); //il numero che appare tra le parentesi
+    std::string player_index = name.substr(name.length() - 2, 1); //il numero che appare tra le parentesi
 
     if (players_number == 1){
         output_file << name << " ha vinto la partita" << "\n";
@@ -270,44 +262,36 @@ bool Board::next(){
     }
 
     if (max_turn_number == turn_count){
-        int budget = player.get_budget();
-        for (int i = 0; i < players_number; i++){
-            int n = players.at(i)->get_budget();
-            if (n < budget){
-                players.erase(players.begin()+i);
-                players_number--;
-            }
-            else if (n > budget){
-                player = *players.at(i); //il nuovo riferimento è il giocatore con il budget maggiore
-                players.erase(players.begin() + turn);
-                turn = i; //utile in caso si trovi un altro giocatore con budget maggiore
-                players_number--;
-                //se ci fossero giocatori precedentemente salvati in fondo al vettore perché con budget uguale, li rimuovo
-                while (players.back()->get_budget() == budget){
-                    players.pop_back();
-                    players_number--;
-                }
-                budget = n;
-            }
-            else{ //sono uguali: mantengo entrambi i giocatori in lista perché vinceranno parimerito
 
-                //salvo i giocatori con budget uguale in coda al vettore per un eventuale rimozione più semplice
-                players.push_back(players.at(i)); 
-                players.erase(players.begin() + i);
-            }
+        std::vector<std::string> budgets(players_number); 
+
+        for (int i = 0; i < players_number; i++){
+            std::string n = std::to_string(i) + std::to_string((*players.at(i)).get_budget());
+            budgets.at(i) = n;
         }
-        if (players_number != 1){
-            output_file << "Raggiunto il limite di turni. I vincitori, a parimerito con " << budget << " fiorini, sono: " << "\n";
-            std::cout << "Raggiunto il limite di turni. I vincitori, a parimerito con " << budget << " fiorini, sono: " << "\n";
+        //piuttosto che creare una compare apposita (che risparmierebbe il passaggio in stringhe), per non appesantire
+        //il codice utilizzo la stessa sfruttata per p_order
+        std::sort(budgets.begin(), budgets.end(), compare);
+
+        std::cout << "Raggiunto il limite di turni. ";
+        output_file << "Raggiunto il limite di turni. ";
+        if (budgets.at(0).substr(1) != budgets.at(1).substr(1)){
+            std::cout << "Vince, con " << budgets.at(0).substr(1) << " fiorini: " << players.at(std::stoi(budgets.at(0).substr(0,1))) -> get_name() << "\n";
+            output_file << "Vince, con " << budgets.at(0).substr(1) << " fiorini: " << players.at(std::stoi(budgets.at(0).substr(0,1))) -> get_name() << "\n";
         }
         else{
-            output_file << "Raggiunto il limite di turni. Il vincitore per maggior numero di fiorini (" << budget << ") è:";
-            std::cout  << "Raggiunto il limite di turni. Il vincitore per maggior numero di fiorini (" << budget << ") è:";
+            std::cout << "Vincono a parimerito, con " << budgets.at(0).substr(1) << " fiorini:" << "\n";
+            std::cout << "\t" << players.at(std::stoi(budgets.at(0).substr(0,1)))->get_name() << "\n";
+            output_file << "Vincono a parimeritocon " << budgets.at(0).substr(1) << " fiorini:" << "\n";
+            output_file << "\t" << players.at(std::stoi(budgets.at(0).substr(0,1)))->get_name() << "\n";
+            int i = 1;
+            while (i < players_number && budgets.at(i-1).substr(1) == budgets.at(i).substr(1)){
+                output_file << "\t" << players.at(std::stoi(budgets.at(i).substr(0,1)))->get_name() << "\n";
+                std::cout << "\t" <<  players.at(std::stoi(budgets.at(i).substr(0,1)))->get_name() << "\n";
+                i++;
+            }
         }
-        for(auto i : players){
-            output_file << "\t" << i->get_name() << "\n";
-            std::cout << "\t" << i->get_name() << "\n";
-        }
+        output_file.close();
         return true;
     }
 
@@ -327,22 +311,30 @@ bool Board::next(){
     //rimuovo il player dalla sua posizione attuale nel tabellone
     int* player_pos = player.get_pos();
     for (int i = 2; i < board[player_pos[0]][player_pos[1]].on_box.length(); i++){ //Sarà sempre almeno dalla posizione 2 per: "| "
-        if (board[player_pos[0]][player_pos[1]].on_box[i] == *std::to_string(player_index).c_str()){
+        if (board[player_pos[0]][player_pos[1]].on_box[i] == *player_index.c_str()){
             std::string::iterator j = board[player_pos[0]][player_pos[1]].on_box.begin() + i;
             board[player_pos[0]][player_pos[1]].on_box.erase(j, j+1);
+
+            //se rimuovo da un angolo, per mantenere la lunghezza corretta devo aggiungere uno spazio 
+            if (board[player_pos[0]][player_pos[1]].on_box[2] == ' '){
+                board[player_pos[0]][player_pos[1]].on_box += '  ';
+            }
         }
     }
 
     //controllo se sono passato per il via
     int prev_budget = player.get_budget();
     player.move(*this, n);
-
-    if (player.get_budget() == prev_budget + through_start){
+    
+    if (player.get_budget() == prev_budget + through_start && turn_count > players_number){
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         output_file << name << " passa per il via e ritira " << through_start << " fiorini" <<"\n";
         std::cout << name << " passa per il via e ritira " << through_start << " fiorini" <<"\n";
     }
+    //Alla prima mossa, silenziosamente i giocatori acquisicono 20 fiorini (per come è strutturata la move)
+    //quindi li rimuovo
+    if (turn_count <= players_number)    player.set_budget(prev_budget);
 
     //aggiungo il player nel tabellone
     n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
@@ -350,7 +342,7 @@ bool Board::next(){
     board[player_pos[0]][player_pos[1]].on_box = board[player_pos[0]][player_pos[1]].on_box.substr(0, n-2);
 
     //se è un angolo    
-    if (board[player_pos[0]][player_pos[1]].on_box[3] == ' ')   board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.end()-1);
+    if (board[player_pos[0]][player_pos[1]].on_box[2] == ' ')   board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.end()-1);
     board[player_pos[0]][player_pos[1]].on_box += player_index + " |";
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -376,38 +368,38 @@ bool Board::next(){
             //ripropongo il menù
             if (interaction)    show_options();
 
-            if (box.at(1) == 'E'){
+            if (box.at(2) == 'E'){
             
                 done = player.buy_land(economic_land);
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << " compra il terreno per " << economic_land << "fiorini" <<"\n"; 
-                    std::cout << name << " compra il terreno per " << economic_land << "fiorini" <<"\n";
+                    output_file << name << " compra il terreno per " << economic_land << " fiorini" <<"\n"; 
+                    std::cout << name << " compra il terreno per " << economic_land << " fiorini" <<"\n";
 
                     board[player_pos[0]][player_pos[1]].index = turn;
                 }
             }
-            else if (box.at(1) == 'S'){
+            else if (box.at(2) == 'S'){
 
                 done = player.buy_land(standard_land);
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << " compra il terreno per " << standard_land << "fiorini" <<"\n"; 
-                    std::cout << name << " compra il terreno per " << standard_land << "fiorini" <<"\n";
+                    output_file << name << " compra il terreno per " << standard_land << " fiorini" <<"\n"; 
+                    std::cout << name << " compra il terreno per " << standard_land << " fiorini" <<"\n";
 
                     board[player_pos[0]][player_pos[1]].index = turn;
                 }
             }
-            else if (box.at(1) == 'L'){
+            else if (box.at(2) == 'L'){
 
                 done = player.buy_land(luxurious_land);
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << " compra il terreno per " << luxurious_land << "fiorini" <<"\n"; 
-                    std::cout << name << " compra il terreno per " << luxurious_land << "fiorini" <<"\n";
+                    output_file << name << " compra il terreno per " << luxurious_land << " fiorini" <<"\n"; 
+                    std::cout << name << " compra il terreno per " << luxurious_land << " fiorini" <<"\n";
 
                     board[player_pos[0]][player_pos[1]].index = turn;
                 }
@@ -428,41 +420,41 @@ bool Board::next(){
         }
 
         //Il terreno è del giocatore, ma non possiede né case né hotel
-        else if (i == turn && box.at(2) != hotel && box.at(2) != house){
+        else if (i == turn && box.at(3) != hotel && box.at(3) != house){
             output_file << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
             std::cout << name << " possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa " << "\n";
 
             //ripropongo il menù
             if (interaction)    show_options();
 
-            if (box.at(1) == 'E'){
+            if (box.at(2) == 'E'){
 
                 done = player.buy_house(economic_house);
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra una casa per " << economic_house << "fiorini" <<"\n"; 
-                    std::cout << name << "compra una casa per " << economic_house << "fiorini" <<"\n";
+                    output_file << name << "compra una casa per " << economic_house << " fiorini" <<"\n"; 
+                    std::cout << name << "compra una casa per " << economic_house << " fiorini" <<"\n";
                 }
             }
-            else if (box.at(1) == 'S'){
+            else if (box.at(2) == 'S'){
 
                 done = player.buy_house(standard_house);
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra una casa per " << standard_house << "fiorini" <<"\n"; 
-                    std::cout << name << "compra una casa per " << standard_house << "fiorini" <<"\n";
+                    output_file << name << "compra una casa per " << standard_house << " fiorini" <<"\n"; 
+                    std::cout << name << "compra una casa per " << standard_house << " fiorini" <<"\n";
                 }
             }
-            else if (box.at(1) == 'L'){
+            else if (box.at(2) == 'L'){
 
                 done = player.buy_house(luxurious_house);
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n"; 
-                    std::cout << name << "compra una casa per " << luxurious_house << "fiorini" <<"\n";
+                    output_file << name << "compra una casa per " << luxurious_house << " fiorini" <<"\n"; 
+                    std::cout << name << "compra una casa per " << luxurious_house << " fiorini" <<"\n";
                 }
             }
 
@@ -481,14 +473,14 @@ bool Board::next(){
         }
 
         //Il terreno è del giocatore ed ha già una casa
-        else if (i == turn && box.at(2) == house){
+        else if (i == turn && box.at(3) == house){
             output_file << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
             std::cout << name << " possiede una casa sul terreno, procedo con verifiche per l'eventuale upgrade a hotel" << "\n";
 
             //ripropongo il menù
             if (interaction)    show_options();
 
-            if (box.at(1) == 'E'){
+            if (box.at(2) == 'E'){
 
                 done = player.buy_hotel(economic_hotel);
                 if (done == Player::purchase::DONE){
@@ -498,7 +490,7 @@ bool Board::next(){
                     std::cout << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n";
                 }
             }
-            else if (box.at(1) == 'S'){
+            else if (box.at(2) == 'S'){
 
                 done = player.buy_hotel(standard_hotel);
                 if (done == Player::purchase::DONE){
@@ -508,7 +500,7 @@ bool Board::next(){
                     std::cout << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n";
                 }
             }
-            else if (box.at(1) == 'L'){
+            else if (box.at(2) == 'L'){
 
                 done = player.buy_hotel(luxurious_hotel);
                 if (done == Player::purchase::DONE){
@@ -533,16 +525,16 @@ bool Board::next(){
             }
         }
 
-        else if (i != turn && box.at(2) == house){
-            if (box.at(1) == 'E' && player.pay(*players.at(i), lodging_Ehouse) >= 0){
+        else if (i != turn && box.at(3) == house){
+            if (box.at(2) == 'E' && player.pay(*players.at(i), lodging_Ehouse) >= 0){
                 output_file << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
                 std::cout << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
             }
-            else if (box.at(1) == 'S' && player.pay(*players.at(i), lodging_Shouse) >= 0){
+            else if (box.at(2) == 'S' && player.pay(*players.at(i), lodging_Shouse) >= 0){
                 output_file << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
                 std::cout << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
             }
-            else if (box.at(1) == 'L' && player.pay(*players.at(i), lodging_Lhouse) >= 0){
+            else if (box.at(2) == 'L' && player.pay(*players.at(i), lodging_Lhouse) >= 0){
                 output_file << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
                 std::cout << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
             }
@@ -553,7 +545,7 @@ bool Board::next(){
             }
         }
 
-        else if (i != turn && box.at(2) == hotel){
+        else if (i != turn && box.at(3) == hotel){
             if (box.at(1) == 'E' && player.pay(*players.at(i), lodging_Ehotel) >= 0){
                 output_file << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
                 std::cout << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";

@@ -1,0 +1,3 @@
+Raggiunto il limite di turni. Vincono a parimeritocon 100 fiorini:
+	CPUPlayer (2)
+	CPUPlayer (1)

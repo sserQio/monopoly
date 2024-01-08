@@ -26,6 +26,7 @@ class Player{
 
         std::string get_name();
         void set_name(std::string name);
+        void set_budget(int n);
 
         void move(Board& board, int times); 
 
@@ -43,6 +44,8 @@ class Player{
         const std::vector<std::string>& get_houses(); //meglio restituire una copia modificabile?
         const std::vector<std::string>& get_hotels();
         const std::vector<std::string>& get_lands();
+
+        class Invalid_Budget{};
 };
 
 #endif //PLAYER_H

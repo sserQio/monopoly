@@ -46,12 +46,13 @@ int main(int argc, char* argv[]){
         std::cout << "Valore non valido, procedo in automatico (10 turni)" << "\n";
         number_of_turns = 10;
     }
-
+    std::cout << type << "\n";
     CPUPlayer p2;
     CPUPlayer p3;
     CPUPlayer p4;
 
     Board board(*p1, p2, p3, p4);
+    board.set_total_turns(number_of_turns);
 
     std::cout << "Inserire nome file di log degli eventi, oppure continuare [ENTER] per crearne uno in automatico: ";
     std::getline(std::cin, type);
@@ -61,7 +62,7 @@ int main(int argc, char* argv[]){
     std::cout << "\n";
     bool done = false;
     while (!done){
-        done = board.next();
+        if ( (done = board.next()) )    break;
         std::cout << "Continuare [ENTER] ";
         std::getline(std::cin, type);
     }

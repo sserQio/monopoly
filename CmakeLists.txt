@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.2)
+
+project (monopoly VERSION 1.0)
+
+include_directories(include)
+
+add_library(monopoly
+    include/board.h
+    include/player.h
+    include/cpuplayer.h
+    include/humanplayer.h
+    src/board.cpp
+    src/player.cpp
+    src/cpuplayer.cpp
+    src/humanplayer.cpp
+)
+
+add_executable(monopolyTester
+    src/monopolyTester.cpp
+)
+
+add_target(monopolyTester
+    monopoly
+)
+
+// DA CAMBIARE IL NOME DEL TESTER DA monopoly.cpp -> monopolyTester.cpp

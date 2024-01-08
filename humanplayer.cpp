@@ -10,8 +10,7 @@ bool HumanPlayer::ask_input(int cost){
     std::cout << "Si vuole procedere all'acquisto per " << cost <<" fiorini? [y/n] ";
     char c;
     std::cin >> c;
-    std::cout <<"\n";
-
+    
     while (true){
         if (c == 'y' || c == 'Y' || c == 's' || c == 'S')   return true;
         else if (c == 'n' || c == 'N')  return false;

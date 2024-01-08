@@ -21,11 +21,11 @@ void Player::move(Board& b, int n){
         n--;
         pos[0]+=1;
     }
-    while(pos[0] == b.get_height() -1 && pos[1] >= 0 && n>0){
+    while(pos[0] == b.get_height() -1 && pos[1] > 0 && n>0){
         n--;
         pos[1]-=1;
     }
-    while(pos[1] == 0 && pos[0] >= 0 && n>0){
+    while(pos[1] == 0 && pos[0] > 0 && n>0){
         n--;
         pos[0]-=1;
         if (pos[0] == 0)    budget+=b.start_increment();  //sono passato per il via
@@ -95,6 +95,11 @@ std::string Player::get_name(){
 
 void Player::set_name(std::string word){
     name = word; 
+}
+
+void Player::set_budget(int n){
+    if (n < 0)  throw Invalid_Budget();
+    budget = n;
 }
 
 int Player::get_budget(){

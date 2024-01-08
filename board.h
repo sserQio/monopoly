@@ -20,7 +20,6 @@ class Board{
     int turn;
     int max_turn_number;
     int turn_count;
-    bool state; //sarà false all'inizio: la partita non è incominciata
 
     const char house = '*';
     const char hotel = '^';
@@ -52,7 +51,7 @@ class Board{
 
     // -- FUNZIONI PRIVATE --
 
-    static bool compare_throws(const std::string& s1, const std::string& s2); 
+    static bool compare(const std::string& s1, const std::string& s2); 
 
     void fill_board(); //prepara il tabellone, chiamata dal costruttore
 
