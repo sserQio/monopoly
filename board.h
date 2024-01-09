@@ -2,7 +2,6 @@
 #define BOARD_H
 
 #include <fstream>
-#include <algorithm>
 #include <chrono>
 #include <thread>
 
@@ -44,8 +43,7 @@ class Board{
 
     std::vector<std::vector<Box> > board = std::vector<std::vector<Box> >(HEIGHT, std::vector<Box>(WIDTH));
 
-    //const std::vector<char> letters = {'E', 'S', 'L'};
-    const char box_types[3] = {'E', 'S', 'L'};
+    const std::string box_types[3] = {"E", "S", "L"};
 
     std::vector<Player*> players = std::vector<Player*>(players_number);
 

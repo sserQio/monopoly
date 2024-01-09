@@ -39,7 +39,7 @@ Player::purchase Player::buy_land(int c){
     //altrimenti
     budget -= c;
 
-    lands.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str());
+    lands.push_back(to_string(Board::rows(pos[0])) += std::to_string(pos[1]+1).c_str());
 
     return purchase::DONE;
 }
@@ -49,7 +49,7 @@ Player::purchase Player::buy_house(int c){
 
     budget -= c;
     
-    std::string coordinates = to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str();
+    std::string coordinates = to_string(Board::rows(pos[0])) += std::to_string(pos[1]+1).c_str();
     houses.push_back(coordinates);
 
     //elimino la posizione dalla lista di terreni posseduti (indicante i terreni senza costruzione)
@@ -67,7 +67,7 @@ Player::purchase Player::buy_hotel(int c){
 
     budget -= c;
     
-    std::string coordinates = to_string(Board::rows(pos[0])) += std::to_string(pos[1]).c_str();
+    std::string coordinates = to_string(Board::rows(pos[0])) += std::to_string(pos[1]+1).c_str();
     hotels.push_back(coordinates);
 
     std::vector<std::string>::iterator i = std::find(houses.begin(), houses.end(), coordinates);
@@ -81,7 +81,7 @@ int Player::pay(Player& p2, int c){
     if (c < 0)  return p2.pay(*this, abs(c));
 
     //in caso il pagante non abbia sufficienti fondi, p2 riceve solo una parte del compenso
-    if(c - budget >= 0)     p2.budget += c - (c - budget); 
+    if( c > budget)     p2.budget += budget; 
     else{   p2.budget += c;}
 
     //non lancio eccezioni in caso di saldo negativo perché lascio la gestione delle regole al tabellone

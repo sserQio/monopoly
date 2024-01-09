@@ -33,38 +33,43 @@ int Board::start_increment(){   return through_start;}
 
 //creazione casuale del tabellone
 void Board::fill_board(){
+    srand(time(0));
     // riempimento della tabella
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
 
-            if (x == 0 && y == 0){  
+            //salto le caselle della matrice che so rimarranno vuote
+            if ((x > 0 && x < WIDTH-1) && (y > 0 && y < HEIGHT-1))      continue;
+
+            //imposto la partenza
+            else if (x == 0 && y == 0){  
                 board[x][y].on_box = "| P |"; 
-                board[x][y].index = -1;
             }
-            else if ((x == WIDTH-1 && y == 0) ||(x == WIDTH-1 && y == HEIGHT-1) ||(x == 0 && y == HEIGHT-1)){
+            //imposto gli angoli (che non sono la partenza)
+            else if ((x == WIDTH-1 && y == 0) || (x == WIDTH-1 && y == HEIGHT-1) || (x == 0 && y == HEIGHT-1)){
                 board[x][y].on_box = "|   |"; 
-                board[x][y].index = -1;
             }
-            else if ((x > 0 && x < WIDTH-1) && (y > 0 && y < HEIGHT-1))   continue;
+            //imposto (pseudo-)randomicamente le caselle nelle varie tipologie
             else {
                 int t = rand()%3;
                 if (t == 0 && n_economy > 0){
-                    board[x][y].on_box = "| E |"; 
-                    board[x][y].index = -1; 
+                    board[x][y].on_box = "| " + box_types[t] + " |"; 
                     n_economy--;
                 }
                 else if (t == 1 && n_standard > 0){
-                    board[x][y].on_box = "| S |"; 
-                    board[x][y].index = -1; 
+                    board[x][y].on_box = "| " + box_types[t] + " |";
                     n_standard--;
                 }
                 else if (t == 2 && n_luxurious > 0){
-                    board[x][y].on_box = "| L |"; 
-                    board[x][y].index = -1; 
+                    board[x][y].on_box = "| " + box_types[t] + " |";
                     n_luxurious--;
                 }
-                else {  y--;}
+                else{ 
+                    y--;
+                }
             }
+            //inizializzo l'indice di appartenenza del terreno al valore standard
+            board[x][y].index = -1;
         }
     }
 }
@@ -82,6 +87,7 @@ void Board::print_board(){
     std::cout << "\n";
     std::string spaces = "";
     std::string standard_space = " "; // lo spazio per l'eventuale presenza di una casa o albergo
+    std::string standard_box = "     ";
 
     //devo prevedere l'eventuale presenza di tutti i giocatori, così che la casella non vada a sovrapporsi
     //con la successiva a causa di un distanziamento troppo piccolo
@@ -90,11 +96,11 @@ void Board::print_board(){
     }
 
     for (int i = 2; i < WIDTH; i++){
-        spaces += "     " + standard_space; //l'ampiezza necessaria per una casella standard "| E |" e il distanziamento dalla successiva
+        spaces += standard_box + standard_space; //l'ampiezza necessaria per una casella standard "| E |" e il distanziamento dalla successiva
     }
     
     //stampo la prima riga con le coordinate delle colonne
-    std::cout << "     ";
+    std::cout << standard_box;
     for (int i = 1; i <= WIDTH; i++){
         std::cout<< i << "    " + standard_space; //così che sia sempre sopra il "tipo di casella"
     }
@@ -109,8 +115,9 @@ void Board::print_board(){
 
             int i = board[y][x].on_box.length();
             if (i > standard_space.length()){
-                //space = standard_space.substr(0, i-standard_space.length());
-                std::string space2 (standard_space.length() - abs(((int)standard_space.length() )- i), ' ');
+                
+                //sistemo il distanziamento a seconda della grandezza della casella e del numero di giocatori 
+                std::string space2 (standard_space.length() - (i - standard_space.length() - (standard_box.length() - players_number -1)), ' ');
                 space = space2;
             }
 
@@ -130,7 +137,12 @@ void Board::print_board(){
 
 //stabilisce l'ordine di gioco tra i giocatori
 void Board::p_order(){
-    output_file.open(file_name, std::ios::out);
+    output_file.open(file_name, std::fstream::app|std::fstream::out);
+    time_t now;
+    time(&now);
+    tm* date = localtime(&now);
+    output_file << "\n" << "\t" << "--- NUOVA PARTITA --- " << asctime(date) << "\n";
+
     output_file << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
     std::cout << "Si tirano i dadi per stabilire l'ordine di gioco" << "\n";
 
@@ -177,6 +189,7 @@ void Board::p_order(){
                 //aspetto mezzo secondo prima di rilanciare
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
+                int d = c;
                 while(c < players_number-1 && std::stoi(dice_throws.at(c+1).substr(1)) == value){
                     c++;
                     int j = std::stoi(dice_throws.at(c).substr(0,1));
@@ -189,7 +202,7 @@ void Board::p_order(){
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 }
                 //riordino quella porzione di lista secondo i nuovi lanci
-                std::sort(dice_throws.begin()+i, dice_throws.begin()+c+1, compare);
+                std::sort(dice_throws.begin()+d, dice_throws.begin()+c+1, compare);
 
                 done = true; //assumiamo di aver finito
                 //controllo se ci sono ancora lanci uguali ed eventualmente reitero
@@ -225,6 +238,7 @@ void Board::p_order(){
         output_file << ", " << players.at(i)->get_name();
         std::cout << ", " << players.at(i)->get_name();
     }
+                                                                                                      
     output_file << "\n" << "\n";
     std::cout << "\n" << "\n";
     output_file.close();
@@ -249,15 +263,17 @@ bool Board::next(){
 
     if (turn >= players_number)     turn = 0;
 
-    output_file.open(file_name);
     Player& player = *players.at(turn);
     std::string name = player.get_name();
     std::string player_index = name.substr(name.length() - 2, 1); //il numero che appare tra le parentesi
+
+    output_file.open(file_name, std::fstream::app|std::fstream::out);
 
     if (players_number == 1){
         output_file << name << " ha vinto la partita" << "\n";
         std::cout << name << " ha vinto la partita" << "\n"; 
 
+        output_file.close();
         return true; 
     }
 
@@ -275,17 +291,18 @@ bool Board::next(){
 
         std::cout << "Raggiunto il limite di turni. ";
         output_file << "Raggiunto il limite di turni. ";
-        if (budgets.at(0).substr(1) != budgets.at(1).substr(1)){
-            std::cout << "Vince, con " << budgets.at(0).substr(1) << " fiorini: " << players.at(std::stoi(budgets.at(0).substr(0,1))) -> get_name() << "\n";
-            output_file << "Vince, con " << budgets.at(0).substr(1) << " fiorini: " << players.at(std::stoi(budgets.at(0).substr(0,1))) -> get_name() << "\n";
+
+        std::string budget = budgets.at(0).substr(1);
+        if (budget != budgets.at(1).substr(1)){
+            std::cout << "Vince, con " << budget << " fiorini: " << players.at(std::stoi(budgets.at(0).substr(0,1))) -> get_name() << "\n";
+            output_file << "Vince, con " << budget << " fiorini: " << players.at(std::stoi(budgets.at(0).substr(0,1))) -> get_name() << "\n";
         }
         else{
-            std::cout << "Vincono a parimerito, con " << budgets.at(0).substr(1) << " fiorini:" << "\n";
-            std::cout << "\t" << players.at(std::stoi(budgets.at(0).substr(0,1)))->get_name() << "\n";
-            output_file << "Vincono a parimeritocon " << budgets.at(0).substr(1) << " fiorini:" << "\n";
-            output_file << "\t" << players.at(std::stoi(budgets.at(0).substr(0,1)))->get_name() << "\n";
-            int i = 1;
-            while (i < players_number && budgets.at(i-1).substr(1) == budgets.at(i).substr(1)){
+            std::cout << "Vincono a parimerito, con " << budget << " fiorini:" << "\n";
+            output_file << "Vincono a parimerito con " << budget << " fiorini:" << "\n";
+
+            int i = 0;
+            while (i < players_number && budgets.at(i).substr(1) == budget){
                 output_file << "\t" << players.at(std::stoi(budgets.at(i).substr(0,1)))->get_name() << "\n";
                 std::cout << "\t" <<  players.at(std::stoi(budgets.at(i).substr(0,1)))->get_name() << "\n";
                 i++;
@@ -317,7 +334,7 @@ bool Board::next(){
 
             //se rimuovo da un angolo, per mantenere la lunghezza corretta devo aggiungere uno spazio 
             if (board[player_pos[0]][player_pos[1]].on_box[2] == ' '){
-                board[player_pos[0]][player_pos[1]].on_box += '  ';
+                board[player_pos[0]][player_pos[1]].on_box += "  ";
             }
         }
     }
@@ -340,7 +357,6 @@ bool Board::next(){
     n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
     //elimino i caratteri " |"
     board[player_pos[0]][player_pos[1]].on_box = board[player_pos[0]][player_pos[1]].on_box.substr(0, n-2);
-
     //se è un angolo    
     if (board[player_pos[0]][player_pos[1]].on_box[2] == ' ')   board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.end()-1);
     board[player_pos[0]][player_pos[1]].on_box += player_index + " |";
@@ -433,8 +449,11 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra una casa per " << economic_house << " fiorini" <<"\n"; 
-                    std::cout << name << "compra una casa per " << economic_house << " fiorini" <<"\n";
+                    output_file << name << " compra una casa per " << economic_house << " fiorini" <<"\n"; 
+                    std::cout << name << " compra una casa per " << economic_house << " fiorini" <<"\n";
+
+                    //inserisco la casa nel tabellone
+                    board[player_pos[0]][player_pos[1]].on_box.insert(3, "*");
                 }
             }
             else if (box.at(2) == 'S'){
@@ -443,8 +462,11 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra una casa per " << standard_house << " fiorini" <<"\n"; 
-                    std::cout << name << "compra una casa per " << standard_house << " fiorini" <<"\n";
+                    output_file << name << " compra una casa per " << standard_house << " fiorini" <<"\n"; 
+                    std::cout << name << " compra una casa per " << standard_house << " fiorini" <<"\n";
+
+                    //inserisco la casa nel tabellone
+                    board[player_pos[0]][player_pos[1]].on_box.insert(3, "*");
                 }
             }
             else if (box.at(2) == 'L'){
@@ -453,22 +475,25 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra una casa per " << luxurious_house << " fiorini" <<"\n"; 
-                    std::cout << name << "compra una casa per " << luxurious_house << " fiorini" <<"\n";
+                    output_file << name << " compra una casa per " << luxurious_house << " fiorini" <<"\n"; 
+                    std::cout << name << " compra una casa per " << luxurious_house << " fiorini" <<"\n";
+
+                    //inserisco la casa nel tabellone
+                    board[player_pos[0]][player_pos[1]].on_box.insert(3, "*");  
                 }
             }
 
             if (done == Player::purchase::OUT_OF_BALANCE){
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                output_file << name << "non ha fondi sufficienti per investire in una casa " << "\n"; 
-                std::cout << name << "non ha fondi sufficienti per investire in una casa " << "\n";
+                output_file << name << " non ha fondi sufficienti per investire in una casa " << "\n"; 
+                std::cout << name << " non ha fondi sufficienti per investire in una casa " << "\n";
             }
             else if (done == Player::purchase::NOT_DONE){
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                output_file << name << "non investe in una casa " << "\n"; 
-                std::cout << name << "non investe in una casa " << "\n";
+                output_file << name << " non investe in una casa " << "\n"; 
+                std::cout << name << " non investe in una casa " << "\n";
             }
         }
 
@@ -486,8 +511,11 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
-                    std::cout << name << "compra un hotel per " << economic_hotel << "fiorini" <<"\n";
+                    output_file << name << " compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
+                    std::cout << name << " compra un hotel per " << economic_hotel << "fiorini" <<"\n";
+
+                    //sostituisco la casa con l'albergo nel tabellone
+                    board[player_pos[0]][player_pos[1]].on_box.at(3) = '^';
                 }
             }
             else if (box.at(2) == 'S'){
@@ -496,8 +524,11 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
-                    std::cout << name << "compra un hotel per " << standard_hotel << "fiorini" <<"\n";
+                    output_file << name << " compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
+                    std::cout << name << " compra un hotel per " << standard_hotel << "fiorini" <<"\n";
+
+                    //sostituisco la casa con l'albergo nel tabellone
+                    board[player_pos[0]][player_pos[1]].on_box.at(3) = '^';
                 }
             }
             else if (box.at(2) == 'L'){
@@ -506,37 +537,40 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
-                    std::cout << name << "compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
+                    output_file << name << " compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
+                    std::cout << name << " compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
+
+                    //sostituisco la casa con l'albergo nel tabellone
+                    board[player_pos[0]][player_pos[1]].on_box.at(3) = '^';
                 }
             }
 
             if (done == Player::purchase::OUT_OF_BALANCE){
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                output_file << name << "non ha fondi sufficienti per investire in un hotel " << "\n"; 
-                std::cout << name << "non ha fondi sufficienti per investire in un hotel " << "\n";
+                output_file << name << " non ha fondi sufficienti per investire in un hotel " << "\n"; 
+                std::cout << name << " non ha fondi sufficienti per investire in un hotel " << "\n";
             }
             else if (done == Player::purchase::NOT_DONE){
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                output_file << name << "non investe in un hotel " << "\n"; 
-                std::cout << name << "non investe in un hotel " << "\n";
+                output_file << name << " non investe in un hotel " << "\n"; 
+                std::cout << name << " non investe in un hotel " << "\n";
             }
         }
 
         else if (i != turn && box.at(3) == house){
             if (box.at(2) == 'E' && player.pay(*players.at(i), lodging_Ehouse) >= 0){
-                output_file << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
-                std::cout << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
+                output_file << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in casa" << "\n";
+                std::cout << name << " paga " << lodging_Ehouse << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in casa" << "\n";
             }
             else if (box.at(2) == 'S' && player.pay(*players.at(i), lodging_Shouse) >= 0){
-                output_file << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
-                std::cout << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
+                output_file << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in casa" << "\n";
+                std::cout << name << " paga " << lodging_Shouse << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in casa" << "\n";
             }
             else if (box.at(2) == 'L' && player.pay(*players.at(i), lodging_Lhouse) >= 0){
-                output_file << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
-                std::cout << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in casa" << "\n";
+                output_file << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in casa" << "\n";
+                std::cout << name << " paga " << lodging_Lhouse << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in casa" << "\n";
             }
             else{
                 output_file << name << " non ha fondi sufficienti per il pernottamento: eliminato" << "\n";
@@ -546,17 +580,17 @@ bool Board::next(){
         }
 
         else if (i != turn && box.at(3) == hotel){
-            if (box.at(1) == 'E' && player.pay(*players.at(i), lodging_Ehotel) >= 0){
-                output_file << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
-                std::cout << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
+            if (box.at(2) == 'E' && player.pay(*players.at(i), lodging_Ehotel) >= 0){
+                output_file << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in hotel" << "\n";
+                std::cout << name << " paga " << lodging_Ehotel << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in hotel" << "\n";
             }
-            else if (box.at(1) == 'S' && player.pay(*players.at(i), lodging_Shotel) >= 0){
-                output_file << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
-                std::cout << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
+            else if (box.at(2) == 'S' && player.pay(*players.at(i), lodging_Shotel) >= 0){
+                output_file << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in hotel" << "\n";
+                std::cout << name << " paga " << lodging_Shotel << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in hotel" << "\n";
             }
-            else if (box.at(1) == 'L' && player.pay(*players.at(i), lodging_Lhotel) >= 0){
-                output_file << name << " paga " << lodging_Lhotel << " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
-                std::cout << name << " paga " << lodging_Lhotel<< " fiorini a " << players.at(i)->get_name() << "per il pernottamento in hotel" << "\n";
+            else if (box.at(2) == 'L' && player.pay(*players.at(i), lodging_Lhotel) >= 0){
+                output_file << name << " paga " << lodging_Lhotel << " fiorini a " << players.at(i)->get_name() << " per il pernottamento in hotel" << "\n";
+                std::cout << name << " paga " << lodging_Lhotel<< " fiorini a " << players.at(i)->get_name() << " per il pernottamento in hotel" << "\n";
             }
             else{
                 output_file << name << " non ha fondi sufficienti per il pernottamento: eliminato" << "\n";
@@ -567,14 +601,19 @@ bool Board::next(){
     }
 
     //ripropongo il menù
-    if (interaction)    show_options();
+    if (interaction && turn == board[player_pos[0]][player_pos[1]].index){
+        std::cin.ignore();
+        show_options();
+    }
+    else if (interaction)   show_options();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    output_file << name << " termina il turno" << "\n";
+    output_file << name << " termina il turno" << "\n" << "\n";
     std::cout << name << " termina il turno" << "\n" << "\n";
-    output_file.close();
     turn++;
     turn_count++;
+
+    output_file.close();
 
     return false;
 }
@@ -583,16 +622,22 @@ void Board::eliminate(int player_index){
     int* player_pos = players.at(player_index)->get_pos();
 
     //elimino il giocatore dal tabellone nella sua posizione corrente
-    int i = board[player_pos[0]][player_pos[1]].on_box.find(std::to_string(player_index));
-    board[player_pos[0]][player_pos[1]].on_box.at(i) = '\0';
+    std::string name = players.at(player_index) -> get_name();
+
+    //cerco l'indice di gioco (quello tra parentesi nel nome, non del vettore di players)
+    int i = board[player_pos[0]][player_pos[1]].on_box.find(name.substr(name.length() - 2, 1));
+    board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.begin()+i, board[player_pos[0]][player_pos[1]].on_box.begin()+i+1);
 
     //elimino tutte le proprietà del giocatore
     for (int j = 0; j < HEIGHT; j++){
-        for(auto& i : board.at(j)){
-            if (i.index == player_index){
-                if (i.on_box.at(2) == '*' || i.on_box.at(2) == '^')     i.on_box.at(2) = '\0';
-                i.index = -1;
+        for(int i = 0; i < WIDTH; i++){
+            //elimino eventuali case e alberghi nei terreni posseduti, e reimposto il terreno come libero
+            if (board[j][i].index == player_index){
+                if (board[j][i].on_box.at(3) == '*' || board[j][i].on_box.at(3) == '^')     board[j][i].on_box.erase(board[j][i].on_box.begin()+3, board[j][i].on_box.begin()+4);
+                board[j][i].index = -1;
             }
+            //salto le celle della matrice che so essere vuote
+            if (j > 0 && j < HEIGHT - 1 && i >= 0 && i < WIDTH -1)  i = WIDTH - 2;
         }
     }
     players.erase(players.begin() + player_index);
@@ -600,12 +645,13 @@ void Board::eliminate(int player_index){
 }
 
 void Board::show_options(){
+
     std::string input;
     std::cout << "Si digiti 'show' per visualizzare la situazione attuale della partita, o [ENTER] per continuare: ";
+    
     std::getline(std::cin, input);
 
     if (input == "show" || input == "'show'")   show();
-    else if (input == "\n")    return;
     //se digita altri caratteri termina automaticamente, non servono ulteriori else
 }
 

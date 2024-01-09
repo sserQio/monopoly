@@ -10,7 +10,6 @@ bool HumanPlayer::ask_input(int cost){
     std::cout << "Si vuole procedere all'acquisto per " << cost <<" fiorini? [y/n] ";
     char c;
     std::cin >> c;
-    
     while (true){
         if (c == 'y' || c == 'Y' || c == 's' || c == 'S')   return true;
         else if (c == 'n' || c == 'N')  return false;
@@ -28,7 +27,7 @@ Player::purchase HumanPlayer::buy_land(int cost){
     return purchase::NOT_DONE;
 }
 Player::purchase HumanPlayer::buy_house(int cost){  
-    if (ask_input(cost))    return Player::buy_land(cost);
+    if (ask_input(cost))    return Player::buy_house(cost);
     
     return purchase::NOT_DONE;
 }

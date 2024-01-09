@@ -1,3 +1,302 @@
-Raggiunto il limite di turni. Vincono a parimeritocon 100 fiorini:
-	CPUPlayer (2)
-	CPUPlayer (1)
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:26:17 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 5
+CPUPlayer (2) tira i dadi: 6
+CPUPlayer (3) tira i dadi: 5
+CPUPlayer (4) tira i dadi: 10
+In 3° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi
+HumanPlayer (1) ritira: 8
+CPUPlayer (3) ritira: 4
+
+Si gioca nell'ordine: CPUPlayer (4), CPUPlayer (2), HumanPlayer (1), CPUPlayer (3)
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) è arrivato nella casella A8
+CPUPlayer (4) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 9
+CPUPlayer (2) è arrivato nella casella C8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:27:53 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 4
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (3) tira i dadi: 11
+CPUPlayer (4) tira i dadi: 7
+In 3° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi
+HumanPlayer (1) ritira: 10
+CPUPlayer (2) ritira: 7
+
+Si gioca nell'ordine: CPUPlayer (3), CPUPlayer (4), HumanPlayer (1), CPUPlayer (2)
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (3) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) è arrivato nella casella A8
+CPUPlayer (4) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:30:59 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 4
+CPUPlayer (2) tira i dadi: 6
+CPUPlayer (3) tira i dadi: 3
+CPUPlayer (4) tira i dadi: 9
+
+Si gioca nell'ordine: CPUPlayer (4), CPUPlayer (2), HumanPlayer (1), CPUPlayer (3)
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 10
+CPUPlayer (4) è arrivato nella casella D8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 9
+CPUPlayer (2) è arrivato nella casella C8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 6 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 7
+HumanPlayer (1) è arrivato nella casella A8
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (3) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) è arrivato nella casella H6
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 10
+CPUPlayer (2) è arrivato nella casella H3
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 6
+HumanPlayer (1) è arrivato nella casella G8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 20 fiorini
+HumanPlayer (1) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:40:07 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 8
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (3) tira i dadi: 11
+CPUPlayer (4) tira i dadi: 5
+In 2° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi
+HumanPlayer (1) ritira: 7
+CPUPlayer (2) ritira: 7
+Vi sono ancora pareggi per la 2° posizione: reitero
+HumanPlayer (1) ritira: 7
+CPUPlayer (2) ritira: 3
+
+Si gioca nell'ordine: CPUPlayer (3), HumanPlayer (1), CPUPlayer (2), CPUPlayer (4)
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 4
+CPUPlayer (3) è arrivato nella casella A5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:41:02 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 8
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (3) tira i dadi: 11
+CPUPlayer (4) tira i dadi: 4
+In 2° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi
+HumanPlayer (1) ritira: 2
+CPUPlayer (2) ritira: 5
+
+Si gioca nell'ordine: CPUPlayer (3), CPUPlayer (2), HumanPlayer (1), CPUPlayer (4)
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 4
+CPUPlayer (3) è arrivato nella casella A5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 20 fiorini
+CPUPlayer (2) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:42:44 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 7
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (4) tira i dadi: 8
+In 2° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi
+HumanPlayer (1) ritira: 6
+CPUPlayer (3) ritira: 3
+
+Si gioca nell'ordine: CPUPlayer (4), HumanPlayer (1), CPUPlayer (3), CPUPlayer (2)
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 5
+CPUPlayer (4) è arrivato nella casella A6
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 7
+HumanPlayer (1) è arrivato nella casella A8
+HumanPlayer (1) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:43:12 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 5
+CPUPlayer (2) tira i dadi: 5
+CPUPlayer (3) tira i dadi: 10
+CPUPlayer (4) tira i dadi: 7
+In 3° posizione vi sono giocatori in parimerito. Si procede con il rilancio dei dadi per quest'ultimi
+HumanPlayer (1) ritira: 9
+CPUPlayer (2) ritira: 3
+
+Si gioca nell'ordine: CPUPlayer (3), CPUPlayer (4), HumanPlayer (1), CPUPlayer (2)
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella A8
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 2
+CPUPlayer (4) è arrivato nella casella A3
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:50:57 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 10
+CPUPlayer (2) tira i dadi: 7
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (4) tira i dadi: 6
+
+Si gioca nell'ordine: HumanPlayer (1), CPUPlayer (3), CPUPlayer (2), CPUPlayer (4)
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 10 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella A8
+CPUPlayer (3) termina il turno
+
+
+	--- NUOVA PARTITA --- Tue Jan  9 16:55:37 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 5
+CPUPlayer (2) tira i dadi: 7
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (4) tira i dadi: 2
+
+Si gioca nell'ordine: CPUPlayer (3), CPUPlayer (2), HumanPlayer (1), CPUPlayer (4)
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 6
+CPUPlayer (3) è arrivato nella casella A7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 6
+CPUPlayer (2) è arrivato nella casella A7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 10 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 7
+HumanPlayer (1) è arrivato nella casella A8
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 5
+CPUPlayer (4) è arrivato nella casella A6
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 11
+CPUPlayer (3) è arrivato nella casella H5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) compra il terreno per 20 fiorini
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 2
+CPUPlayer (2) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 6
+HumanPlayer (1) è arrivato nella casella G8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 20 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 3
+CPUPlayer (4) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+

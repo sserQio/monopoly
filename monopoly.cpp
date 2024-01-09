@@ -46,7 +46,6 @@ int main(int argc, char* argv[]){
         std::cout << "Valore non valido, procedo in automatico (10 turni)" << "\n";
         number_of_turns = 10;
     }
-    std::cout << type << "\n";
     CPUPlayer p2;
     CPUPlayer p3;
     CPUPlayer p4;
