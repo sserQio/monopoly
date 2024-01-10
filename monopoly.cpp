@@ -1,6 +1,7 @@
 #include "board.cpp"
 #include "cpuplayer.cpp"
 #include "humanplayer.cpp"
+#include "player.cpp"
 
 int main(int argc, char* argv[]){
     std::string type;

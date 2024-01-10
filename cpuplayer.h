@@ -17,7 +17,4 @@ class CPUPlayer: public Player{
 };
 
 
-
-
-
 #endif //CPU_H

@@ -1,5 +1,5 @@
 #include "board.h"
-#include "player.cpp"
+#include "player.h"
 
 //   ---  COSTRUTTORI  ---
 
