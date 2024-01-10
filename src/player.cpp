@@ -1,5 +1,6 @@
 #include "../include/player.h"
 #include "../include/board.h"
+#include <algorithm>
 
 //   ---  FUNZIONI DI GIOCO  ---
 

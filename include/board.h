@@ -4,6 +4,7 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include <vector>
 
 class Player;
 
