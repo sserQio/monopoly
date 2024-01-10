@@ -19,8 +19,8 @@ add_executable(monopolyTester
     src/monopolyTester.cpp
 )
 
-add_target(monopolyTester
-    monopoly
+target_link_libraries(monopolyTester
+    eseg
 )
 
-// DA CAMBIARE IL NOME DEL TESTER DA monopoly.cpp -> monopolyTester.cpp
+# DA CAMBIARE IL NOME DEL TESTER DA monopoly.cpp -> monopolyTester.cpp
