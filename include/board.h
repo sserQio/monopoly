@@ -86,19 +86,4 @@ class Board{
 //valutare la convenienza o meno
 std::string to_string(Board::rows c);
 
-// 
-
 #endif //BOARD_H
-
-/*
-        1           2           3           4           5           6           7           8
-A  | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 | | P ^1234 |
-B  |        | |                                                     |      |
-C  |        | |                                                     |      |
-D  |        | |                                                     |      |
-E  |        | |                                                     |      |
-F  |        | |                                                     |      |
-G  |        | |                                                     |      |
-H  |        | |      | |      | |      | |      | |      | |      | |   S  |
-
-*/
