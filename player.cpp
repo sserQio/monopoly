@@ -1,8 +1,5 @@
 #include "player.h"
 
-//   ---  COSTRUTTORI  ---
-
-
 //   ---  FUNZIONI DI GIOCO  ---
 
 int Player::throw_dice(){
@@ -17,7 +14,7 @@ void Player::move(Board& b, int n){
         if (pos[1] == 0)    budget+=b.start_increment(); //sono passato per il via
         pos[1]+=1;
     }
-    while(pos[1] == b.get_width() -1 && pos[0] < b.get_height() -1 && n>0){ //pos[0] partirà al massimo da HEIGHT -1
+    while(pos[1] == b.get_width() -1 && pos[0] < b.get_height() -1 && n>0){ 
         n--;
         pos[0]+=1;
     }
@@ -87,6 +84,7 @@ int Player::pay(Player& p2, int c){
     //non lancio eccezioni in caso di saldo negativo perché lascio la gestione delle regole al tabellone
     return budget -= c;
 }
+
 //   ---  FUNZIONI DI ACCESSO  ---
 
 std::string Player::get_name(){
