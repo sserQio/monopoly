@@ -1,6 +1,0 @@
-È il turno di HumanPlayer (1)
-HumanPlayer (1) tira i dadi: 10
-HumanPlayer (1) è arrivato nella casella D8
-Il terreno è libero, procedo con verifiche per l'eventuale acquisto
-HumanPlayer (1) compra il terreno per 20 fiorini
-HumanPlayer (1) termina il turno
