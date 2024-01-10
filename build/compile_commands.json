@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/Users/sergio/Documents/Coding/monopoly/build",
+  "command": "/opt/homebrew/bin/aarch64-apple-darwin23-g++-13  -I/Users/sergio/Documents/Coding/monopoly/include -g -std=gnu++11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/monopoly.dir/src/board.cpp.o -c /Users/sergio/Documents/Coding/monopoly/src/board.cpp",
+  "file": "/Users/sergio/Documents/Coding/monopoly/src/board.cpp",
+  "output": "CMakeFiles/monopoly.dir/src/board.cpp.o"
+},
+{
+  "directory": "/Users/sergio/Documents/Coding/monopoly/build",
+  "command": "/opt/homebrew/bin/aarch64-apple-darwin23-g++-13  -I/Users/sergio/Documents/Coding/monopoly/include -g -std=gnu++11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/monopoly.dir/src/player.cpp.o -c /Users/sergio/Documents/Coding/monopoly/src/player.cpp",
+  "file": "/Users/sergio/Documents/Coding/monopoly/src/player.cpp",
+  "output": "CMakeFiles/monopoly.dir/src/player.cpp.o"
+},
+{
+  "directory": "/Users/sergio/Documents/Coding/monopoly/build",
+  "command": "/opt/homebrew/bin/aarch64-apple-darwin23-g++-13  -I/Users/sergio/Documents/Coding/monopoly/include -g -std=gnu++11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/monopoly.dir/src/cpuplayer.cpp.o -c /Users/sergio/Documents/Coding/monopoly/src/cpuplayer.cpp",
+  "file": "/Users/sergio/Documents/Coding/monopoly/src/cpuplayer.cpp",
+  "output": "CMakeFiles/monopoly.dir/src/cpuplayer.cpp.o"
+},
+{
+  "directory": "/Users/sergio/Documents/Coding/monopoly/build",
+  "command": "/opt/homebrew/bin/aarch64-apple-darwin23-g++-13  -I/Users/sergio/Documents/Coding/monopoly/include -g -std=gnu++11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/monopoly.dir/src/humanplayer.cpp.o -c /Users/sergio/Documents/Coding/monopoly/src/humanplayer.cpp",
+  "file": "/Users/sergio/Documents/Coding/monopoly/src/humanplayer.cpp",
+  "output": "CMakeFiles/monopoly.dir/src/humanplayer.cpp.o"
+},
+{
+  "directory": "/Users/sergio/Documents/Coding/monopoly/build",
+  "command": "/opt/homebrew/bin/aarch64-apple-darwin23-g++-13  -I/Users/sergio/Documents/Coding/monopoly/include -g -std=gnu++11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/monopolyTester.dir/src/monopolyTester.cpp.o -c /Users/sergio/Documents/Coding/monopoly/src/monopolyTester.cpp",
+  "file": "/Users/sergio/Documents/Coding/monopoly/src/monopolyTester.cpp",
+  "output": "CMakeFiles/monopolyTester.dir/src/monopolyTester.cpp.o"
+}
+]
