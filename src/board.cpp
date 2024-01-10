@@ -1,7 +1,8 @@
+
 #include "../include/board.h"
 #include "../include/player.h"
 
-//   ---  COSTRUTTORI  ---
+//   ---  COSTRUTTORE  ---
 
 Board::Board(Player& p1, Player& p2, Player& p3, Player& p4) 
     : file_name("output.txt"), turn(0), players_number(4), n_economy(8), n_standard(10), n_luxurious(6), max_turn_number(-1), turn_count(0) {
@@ -74,6 +75,7 @@ void Board::fill_board(){
     }
 }
 
+//Funzione di confronto utilizzata da sort() in p_order e next()
 bool Board::compare(const std::string& throw1, const std::string& throw2){
     return std::stoi(throw1.substr(1)) > std::stoi(throw2.substr(1));
 }
@@ -133,10 +135,58 @@ void Board::print_board(){
     std::cout<< "\n";
 }
 
+//Se il giocatore è predisposto all'interazione via terminale (ad esempio HumanPlayer), gli si propone
+//come interagire: al momento è presente la sola opzione show come da consegna, ma l'idea è che sia eventualmente
+//ampliabile
+void Board::show_options(){
+
+    std::string input;
+    std::cout << "Si digiti 'show' per visualizzare la situazione attuale della partita, o [ENTER] per continuare: ";
+    
+    std::getline(std::cin, input);
+
+    if (input == "show" || input == "'show'")   show();
+    //se digita altri caratteri termina automaticamente, non servono ulteriori else
+}
+
+//L'interazione con il giocatore avviene solo via terminale, sul log file compariranno solo le azioni intraprese
+void Board::show(){
+    std::cout << "\n" << "Ecco la situazione attuale della partita: " << "\n";
+    print_board();
+
+    //stampo le posizioni di alberghi, case e terreni vuoti di ciascun giocatore
+    for (auto i : players){
+        std::string name = i->get_name();
+
+        std::cout << name <<" possiede:" << "\n";
+
+        std::cout << "\t" << "Alberghi nelle posizioni: ";
+        for (auto j : i->get_hotels())  std::cout << j << " ";
+
+        std::cout << "\n" << "\t" << "Case nelle posizioni: ";
+        for (auto j : i->get_houses())   std::cout << j << " ";
+
+        std::cout << "\n" << "\t" << "Terreni vuoti nelle posizioni: ";
+        for (auto j : i->get_lands())    std::cout << j << " ";
+
+        std::cout << "\n";
+    }
+
+    //stampo i fiorini di ciascun giocatore
+    std::cout << "\n" << "La situazione economica di ciascun giocatore è la seguente: " << "\n";
+    for (auto i : players){
+        std::cout << "\t" << i->get_name() <<" ha " << i->get_budget() << " fiorini" << "\n";
+    }
+    std::cout << "\n";
+}
+
 //   ---  FUNZIONI DI GIOCO  ---
 
 //stabilisce l'ordine di gioco tra i giocatori
 void Board::p_order(){
+
+    //Scegliamo di non sovrascrivere il file di log ad ogni esecuzione e predisporlo invece
+    //al supporto di più partite separate dall'identificazione di quando sono avvenute (data e ora locale)
     output_file.open(file_name, std::fstream::app|std::fstream::out);
     time_t now;
     time(&now);
@@ -150,11 +200,14 @@ void Board::p_order(){
     std::vector<Player*> temp = players;
 
     srand(time(0));
+    //popolo il vettore dei lanci per poi ordinarlo in ordine decrescente
     for (int i = 0; i < players_number; i++){
+
         std::string n = std::to_string((*players.at(i)).throw_dice());
         output_file << players.at(i)->get_name() << " tira i dadi: " << n <<"\n";
         std::cout << players.at(i)->get_name() << " tira i dadi: " << n <<"\n";
-        //uso stringhe per poter etichettare a ciascun lancio l'indice del giocatore
+
+        //uso stringhe per poter etichettare a ciascun lancio l'indice del giocatore che lo effettua
         dice_throws.at(i) = std::to_string(i) + n; 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
@@ -225,9 +278,10 @@ void Board::p_order(){
             i--;
         }
     }
+    //Manca l'ultimo giocatore: lo inserisco in ultima posizione
     players.at(players_number-1) = temp.at(std::stoi(dice_throws.at(players_number-1).substr(0,1)));
 
-    //stampo l'ordine di gioco, sistemando man mano l'array di giocatori
+    //stampo l'ordine di gioco
     output_file << "\n" <<"Si gioca nell'ordine: ";
     std::cout << "\n" <<"Si gioca nell'ordine: ";
 
@@ -235,8 +289,8 @@ void Board::p_order(){
     std::cout << players.at(0)->get_name();
 
     for (int i = 1; i < players_number; i++){
-        output_file << ", " << players.at(i)->get_name();
-        std::cout << ", " << players.at(i)->get_name();
+        output_file << ", " << players.at(i) -> get_name();
+        std::cout << ", " << players.at(i) -> get_name();
     }
                                                                                                       
     output_file << "\n" << "\n";
@@ -244,8 +298,10 @@ void Board::p_order(){
     output_file.close();
 }
 
-//gestione del turno di un giocatore: AGGIUNGERE OPZIONE "show()"
+//Funzione che gestisce il turno di gioco: 
+//  restituisce True solo se il turno comporta la fine della partita
 bool Board::next(){
+
     //Se è la prima giocata, devo stabilire l'ordine di gioco
     if (turn_count == 0){
         p_order();
@@ -289,8 +345,8 @@ bool Board::next(){
         //il codice utilizzo la stessa sfruttata per p_order
         std::sort(budgets.begin(), budgets.end(), compare);
 
-        std::cout << "Raggiunto il limite di turni. ";
-        output_file << "Raggiunto il limite di turni. ";
+        std::cout << "Raggiunto il limite di turni (" << max_turn_number <<  "). ";
+        output_file << "Raggiunto il limite di turni (" << max_turn_number <<  "). ";
 
         std::string budget = budgets.at(0).substr(1);
         if (budget != budgets.at(1).substr(1)){
@@ -644,46 +700,6 @@ void Board::eliminate(int player_index){
     players_number--;
 }
 
-void Board::show_options(){
-
-    std::string input;
-    std::cout << "Si digiti 'show' per visualizzare la situazione attuale della partita, o [ENTER] per continuare: ";
-    
-    std::getline(std::cin, input);
-
-    if (input == "show" || input == "'show'")   show();
-    //se digita altri caratteri termina automaticamente, non servono ulteriori else
-}
-
-void Board::show(){
-    std::cout << "\n" << "Ecco la situazione attuale della partita: " << "\n";
-    print_board();
-
-    //stampo le posizioni di alberghi, case e terreni vuoti di ciascun giocatore
-    for (auto i : players){
-        std::string name = i->get_name();
-
-        std::cout << name <<" possiede:" << "\n";
-
-        std::cout << "\t" << "Alberghi nelle posizioni: ";
-        for (auto j : i->get_hotels())  std::cout << j << " ";
-
-        std::cout << "\n" << "\t" << "Case nelle posizioni: ";
-        for (auto j : i->get_houses())   std::cout << j << " ";
-
-        std::cout << "\n" << "\t" << "Terreni vuoti nelle posizioni: ";
-        for (auto j : i->get_lands())    std::cout << j << " ";
-
-        std::cout << "\n";
-    }
-
-    //stampo i fiorini di ciascun giocatore
-    std::cout << "\n" << "La situazione economica di ciascun giocatore è la seguente: " << "\n";
-    for (auto i : players){
-        std::cout << "\t" << i->get_name() <<" ha " << i->get_budget() << " fiorini" << "\n";
-    }
-    std::cout << "\n";
-}
 
 //   ---  HELPER FUNCTIONS  ---
 

@@ -66,7 +66,5 @@ int main(int argc, char* argv[]){
         std::cout << "Continuare [ENTER] ";
         std::getline(std::cin, type);
     }
-
-    delete p1;
     return 0;
 }

@@ -80,7 +80,7 @@ int Player::pay(Player& p2, int c){
     if( c > budget)     p2.budget += budget; 
     else{   p2.budget += c;}
 
-    //non lancio eccezioni in caso di saldo negativo perché lascio la gestione delle regole al tabellone
+    //non lancio eccezioni in caso di saldo negativo perché lascio la gestione delle regole al tabellone (si pensi ad un eventuale funzione di prestito)
     return budget -= c;
 }
 
