@@ -9,8 +9,7 @@
 class Player;
 
 class Board{
-    const int HEIGHT = 8;
-    const int WIDTH = 8;
+    const int SIDE = 8;
 
     int n_economy = 8;
     int n_standard = 10;
@@ -42,7 +41,7 @@ class Board{
         int index;
     };
 
-    std::vector<std::vector<Box> > board = std::vector<std::vector<Box> >(HEIGHT, std::vector<Box>(WIDTH));
+    std::vector<Box> board = std::vector<Box>((4 * SIDE) - 4);
 
     const std::string box_types[3] = {"E", "S", "L"};
 
@@ -51,6 +50,8 @@ class Board{
     // -- FUNZIONI PRIVATE --
 
     static bool compare(const std::string& s1, const std::string& s2); 
+
+    int convert_pos(int* pos);
 
     void fill_board(); //prepara il tabellone, chiamata dal costruttore
 
@@ -63,8 +64,7 @@ class Board{
         void set_output_file(std::string file);
         void set_total_turns(int n);
     
-        int get_height();
-        int get_width();
+        int get_side();
 
         int start_increment(); //valore incremento in fiorini al passare dal via
 

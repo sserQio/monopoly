@@ -26,8 +26,8 @@ void Board::set_total_turns(int n){
     max_turn_number = n;
 }
 
-int Board::get_height(){    return HEIGHT;}
-int Board::get_width(){     return WIDTH;}
+int Board::get_side(){    return SIDE;}
+
 int Board::start_increment(){   return through_start;}
 
 
@@ -37,42 +37,38 @@ int Board::start_increment(){   return through_start;}
 void Board::fill_board(){
     srand(time(0));
     // riempimento della tabella
-    for (int x = 0; x < WIDTH; x++){
-        for (int y = 0; y < HEIGHT; y++){
+    for (int x = 0; x < board.size(); x++){
 
-            //salto le caselle della matrice che so rimarranno vuote
-            if ((x > 0 && x < WIDTH-1) && (y > 0 && y < HEIGHT-1))      continue;
-
-            //imposto la partenza
-            else if (x == 0 && y == 0){  
-                board[x][y].on_box = "| P |"; 
-            }
-            //imposto gli angoli (che non sono la partenza)
-            else if ((x == WIDTH-1 && y == 0) || (x == WIDTH-1 && y == HEIGHT-1) || (x == 0 && y == HEIGHT-1)){
-                board[x][y].on_box = "|   |"; 
-            }
-            //imposto (pseudo-)randomicamente le caselle nelle varie tipologie
-            else {
-                int t = rand()%3;
-                if (t == 0 && n_economy > 0){
-                    board[x][y].on_box = "| " + box_types[t] + " |"; 
-                    n_economy--;
-                }
-                else if (t == 1 && n_standard > 0){
-                    board[x][y].on_box = "| " + box_types[t] + " |";
-                    n_standard--;
-                }
-                else if (t == 2 && n_luxurious > 0){
-                    board[x][y].on_box = "| " + box_types[t] + " |";
-                    n_luxurious--;
-                }
-                else{ 
-                    y--;
-                }
-            }
-            //inizializzo l'indice di appartenenza del terreno al valore standard
-            board[x][y].index = -1;
+        //imposto la partenza
+        if (x == 0){  
+            board[x].on_box = "| P |"; 
         }
+        //imposto gli angoli (che non sono la partenza)
+        else if (x % (SIDE - 1) == 0){
+            board[x].on_box = "|   |"; 
+        }
+        //imposto (pseudo-)randomicamente le caselle nelle varie tipologie
+        else {
+            int t = rand()%3;
+            std::cout << t << " con " << n_economy << " " << n_standard << " " << n_luxurious << "\n";
+            if (t == 0 && n_economy > 0){
+                board[x].on_box = "| " + box_types[t] + " |"; 
+                n_economy--;
+            }
+            else if (t == 1 && n_standard > 0){
+                board[x].on_box = "| " + box_types[t] + " |";
+                n_standard--;
+            }
+            else if (t == 2 && n_luxurious > 0){
+                board[x].on_box = "| " + box_types[t] + " |";
+                n_luxurious--;
+            }
+            else{
+                x--;
+            }
+        }
+        //inizializzo l'indice di appartenenza del terreno al valore standard
+        board[x].index = -1;
     }
 }
 
@@ -81,8 +77,15 @@ bool Board::compare(const std::string& throw1, const std::string& throw2){
     return std::stoi(throw1.substr(1)) > std::stoi(throw2.substr(1));
 }
 
+//converte coordinate (y,x) in una posizione valida (e corrispondente) nel vettore board
+int Board::convert_pos(int* pos){
+    if (pos[1] >= pos[0])   return pos[0]+pos[1];
+    //altrimenti
+    return ((2*SIDE) - 2) + (SIDE - pos[1] - 1) + (SIDE - pos[0] - 1);
+}
+
 int Board::whose_property(int* pos){
-    return board[pos[0]][pos[1]].index;
+    return board.at(convert_pos(pos)).index;
 }
 
 //stampa a terminale del tabellone corrente
@@ -98,25 +101,26 @@ void Board::print_board(){
         standard_space+=" ";
     }
 
-    for (int i = 2; i < WIDTH; i++){
+    for (int i = 2; i < SIDE; i++){
         spaces += standard_box + standard_space; //l'ampiezza necessaria per una casella standard "| E |" e il distanziamento dalla successiva
     }
     
     //stampo la prima riga con le coordinate delle colonne
     std::cout << standard_box;
-    for (int i = 1; i <= WIDTH; i++){
+    for (int i = 1; i <= SIDE; i++){
         std::cout<< i << "    " + standard_space; //così che sia sempre sopra il "tipo di casella"
     }
     std::cout << "\n";
     std::cout << "\n";
 
-    for (int y = 0; y < HEIGHT; y++){
+    for (int y = 0; y < SIDE; y++){
         std::cout << to_string(rows(y)) << "  ";
 
-        for (int x = 0; x < WIDTH; x++){
-            std::string space = standard_space;
+        for (int x = 0; x < SIDE; x++){
 
-            int i = board[y][x].on_box.length();
+            std::string space = standard_space;
+            int pos[2] = {y, x};
+            int i = board.at(convert_pos(pos)).on_box.length();
             if (i > standard_space.length()){
                 
                 //sistemo il distanziamento a seconda della grandezza della casella e del numero di giocatori 
@@ -124,10 +128,12 @@ void Board::print_board(){
                 space = space2;
             }
 
-            std::cout << board[y][x].on_box << space;
-            if (y > 0 && y < HEIGHT-1){
-                std::cout << spaces << board[y][WIDTH-1].on_box;
-                x = WIDTH-1;
+            std::cout << board.at(convert_pos(pos)).on_box << space;
+            if (y > 0 && y < SIDE-1){
+                pos[0] = y;
+                pos[1] =SIDE - 1;
+                std::cout << spaces << board.at(convert_pos(pos)).on_box;
+                x = SIDE-1;
             }
         }
         std::cout << "\n";
@@ -302,7 +308,6 @@ void Board::p_order(){
 //Funzione che gestisce il turno di gioco: 
 //  restituisce True solo se il turno comporta la fine della partita
 bool Board::next(){
-
     //Se è la prima giocata, devo stabilire l'ordine di gioco
     if (turn_count == 0){
         p_order();
@@ -311,10 +316,10 @@ bool Board::next(){
         for (int i = 0; i < players_number; i++){
 
             int* player_pos = players[i] -> get_pos();
-            int n = board[player_pos[0]][player_pos[1]].on_box.length(); 
+            int n = board.at(convert_pos(player_pos)).on_box.length(); 
             //elimino i caratteri " |"
-            board[player_pos[0]][player_pos[1]].on_box = board[player_pos[0]][player_pos[1]].on_box.substr(0, n-2);
-            board[player_pos[0]][player_pos[1]].on_box += std::to_string(i+1) + " |";
+            board.at(convert_pos(player_pos)).on_box = board.at(convert_pos(player_pos)).on_box.substr(0, n-2);
+            board.at(convert_pos(player_pos)).on_box += std::to_string(i+1) + " |";
         }
     }
 
@@ -346,8 +351,8 @@ bool Board::next(){
         //il codice utilizzo la stessa sfruttata per p_order
         std::sort(budgets.begin(), budgets.end(), compare);
 
-        std::cout << "Raggiunto il limite di turni (" << max_turn_number <<  "). ";
-        output_file << "Raggiunto il limite di turni (" << max_turn_number <<  "). ";
+        std::cout << "Raggiunto il limite di turni. ";
+        output_file << "Raggiunto il limite di turni. ";
 
         std::string budget = budgets.at(0).substr(1);
         if (budget != budgets.at(1).substr(1)){
@@ -384,14 +389,17 @@ bool Board::next(){
 
     //rimuovo il player dalla sua posizione attuale nel tabellone
     int* player_pos = player.get_pos();
-    for (int i = 2; i < board[player_pos[0]][player_pos[1]].on_box.length(); i++){ //Sarà sempre almeno dalla posizione 2 per: "| "
-        if (board[player_pos[0]][player_pos[1]].on_box[i] == *player_index.c_str()){
-            std::string::iterator j = board[player_pos[0]][player_pos[1]].on_box.begin() + i;
-            board[player_pos[0]][player_pos[1]].on_box.erase(j, j+1);
+    int actual_pos = convert_pos(player_pos);
+
+    for (int i = 2; i < board.at(actual_pos).on_box.length(); i++){ //Sarà sempre almeno dalla posizione 2 per: "| "
+        if (board.at(actual_pos).on_box[i] == *player_index.c_str()){
+
+            std::string::iterator j = board.at(actual_pos).on_box.begin() + i;
+            board.at(actual_pos).on_box.erase(j, j+1);
 
             //se rimuovo da un angolo, per mantenere la lunghezza corretta devo aggiungere uno spazio 
-            if (board[player_pos[0]][player_pos[1]].on_box[2] == ' '){
-                board[player_pos[0]][player_pos[1]].on_box += "  ";
+            if (board.at(actual_pos).on_box[2] == ' '){
+                board.at(actual_pos).on_box += "  ";
             }
         }
     }
@@ -399,7 +407,7 @@ bool Board::next(){
     //controllo se sono passato per il via
     int prev_budget = player.get_budget();
     player.move(*this, n);
-    
+
     if (player.get_budget() == prev_budget + through_start && turn_count >= players_number){
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -410,13 +418,14 @@ bool Board::next(){
     //quindi li rimuovo
     if (turn_count < players_number)    player.set_budget(prev_budget);
 
+    actual_pos = convert_pos(player.get_pos());
     //aggiungo il player nel tabellone
-    n = board[player_pos[0]][player_pos[1]].on_box.length(); //riutilizzo n perché il valore del lancio non serve più
+    n = board.at(actual_pos).on_box.length(); //riutilizzo n perché il valore del lancio non serve più
     //elimino i caratteri " |"
-    board[player_pos[0]][player_pos[1]].on_box = board[player_pos[0]][player_pos[1]].on_box.substr(0, n-2);
+    board.at(actual_pos).on_box = board.at(actual_pos).on_box.substr(0, n-2);
     //se è un angolo    
-    if (board[player_pos[0]][player_pos[1]].on_box[2] == ' ')   board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.end()-1);
-    board[player_pos[0]][player_pos[1]].on_box += player_index + " |";
+    if (board.at(actual_pos).on_box[2] == ' ')   board.at(actual_pos).on_box.erase(board.at(actual_pos).on_box.end()-1);
+    board.at(actual_pos).on_box += player_index + " |";
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     //verifico in che cella mi trovo e agisco di conseguenza
@@ -424,11 +433,11 @@ bool Board::next(){
     output_file << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]+1) << "\n";
     std::cout << name << " è arrivato nella casella " << to_string(rows(player_pos[0])) + std::to_string(player_pos[1]+1) << "\n";
 
-    if (!((player_pos[0] == 0 || player_pos[0] == HEIGHT-1) && (player_pos[1] == 0 || player_pos[1] == WIDTH-1))){
+    if (!((player_pos[0] == 0 || player_pos[0] == SIDE-1) && (player_pos[1] == 0 || player_pos[1] == SIDE-1))){
         //(se non sono in un angolo del tabellone)
 
         int i = whose_property(player_pos);
-        std::string box = board[player_pos[0]][player_pos[1]].on_box;
+        std::string box = board.at(actual_pos).on_box;
 
         Player::purchase done = Player::purchase::NOT_DONE;
         //Il terreno è libero
@@ -450,7 +459,7 @@ bool Board::next(){
                     output_file << name << " compra il terreno per " << economic_land << " fiorini" <<"\n"; 
                     std::cout << name << " compra il terreno per " << economic_land << " fiorini" <<"\n";
 
-                    board[player_pos[0]][player_pos[1]].index = turn;
+                    board.at(actual_pos).index = turn;
                 }
             }
             else if (box.at(2) == 'S'){
@@ -462,7 +471,7 @@ bool Board::next(){
                     output_file << name << " compra il terreno per " << standard_land << " fiorini" <<"\n"; 
                     std::cout << name << " compra il terreno per " << standard_land << " fiorini" <<"\n";
 
-                    board[player_pos[0]][player_pos[1]].index = turn;
+                    board.at(actual_pos).index = turn;
                 }
             }
             else if (box.at(2) == 'L'){
@@ -474,7 +483,7 @@ bool Board::next(){
                     output_file << name << " compra il terreno per " << luxurious_land << " fiorini" <<"\n"; 
                     std::cout << name << " compra il terreno per " << luxurious_land << " fiorini" <<"\n";
 
-                    board[player_pos[0]][player_pos[1]].index = turn;
+                    board.at(actual_pos).index = turn;
                 }
             }
 
@@ -510,7 +519,7 @@ bool Board::next(){
                     std::cout << name << " compra una casa per " << economic_house << " fiorini" <<"\n";
 
                     //inserisco la casa nel tabellone
-                    board[player_pos[0]][player_pos[1]].on_box.insert(3, "*");
+                    board.at(actual_pos).on_box.insert(3, "*");
                 }
             }
             else if (box.at(2) == 'S'){
@@ -523,7 +532,7 @@ bool Board::next(){
                     std::cout << name << " compra una casa per " << standard_house << " fiorini" <<"\n";
 
                     //inserisco la casa nel tabellone
-                    board[player_pos[0]][player_pos[1]].on_box.insert(3, "*");
+                    board.at(actual_pos).on_box.insert(3, "*");
                 }
             }
             else if (box.at(2) == 'L'){
@@ -536,7 +545,7 @@ bool Board::next(){
                     std::cout << name << " compra una casa per " << luxurious_house << " fiorini" <<"\n";
 
                     //inserisco la casa nel tabellone
-                    board[player_pos[0]][player_pos[1]].on_box.insert(3, "*");  
+                    board.at(actual_pos).on_box.insert(3, "*");  
                 }
             }
 
@@ -572,7 +581,7 @@ bool Board::next(){
                     std::cout << name << " compra un hotel per " << economic_hotel << "fiorini" <<"\n";
 
                     //sostituisco la casa con l'albergo nel tabellone
-                    board[player_pos[0]][player_pos[1]].on_box.at(3) = '^';
+                    board.at(actual_pos).on_box.at(3) = '^';
                 }
             }
             else if (box.at(2) == 'S'){
@@ -585,7 +594,7 @@ bool Board::next(){
                     std::cout << name << " compra un hotel per " << standard_hotel << "fiorini" <<"\n";
 
                     //sostituisco la casa con l'albergo nel tabellone
-                    board[player_pos[0]][player_pos[1]].on_box.at(3) = '^';
+                    board.at(actual_pos).on_box.at(3) = '^';
                 }
             }
             else if (box.at(2) == 'L'){
@@ -598,7 +607,7 @@ bool Board::next(){
                     std::cout << name << " compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
 
                     //sostituisco la casa con l'albergo nel tabellone
-                    board[player_pos[0]][player_pos[1]].on_box.at(3) = '^';
+                    board.at(actual_pos).on_box.at(3) = '^';
                 }
             }
 
@@ -658,7 +667,7 @@ bool Board::next(){
     }
 
     //ripropongo il menù
-    if (interaction && turn == board[player_pos[0]][player_pos[1]].index){
+    if (interaction && turn == board.at(actual_pos).index){
         std::cin.ignore();
         show_options();
     }
@@ -677,26 +686,21 @@ bool Board::next(){
 
 void Board::eliminate(int player_index){
     int* player_pos = players.at(player_index)->get_pos();
+    int actual_pos = convert_pos(player_pos);
 
     //elimino il giocatore dal tabellone nella sua posizione corrente
     std::string name = players.at(player_index) -> get_name();
 
     //cerco l'indice di gioco (quello tra parentesi nel nome, non del vettore di players)
-    int i = board[player_pos[0]][player_pos[1]].on_box.find(name.substr(name.length() - 2, 1));
-    board[player_pos[0]][player_pos[1]].on_box.erase(board[player_pos[0]][player_pos[1]].on_box.begin()+i, board[player_pos[0]][player_pos[1]].on_box.begin()+i+1);
+    int i = board.at(actual_pos).on_box.find(name.substr(name.length() - 2, 1));
+    board.at(actual_pos).on_box.erase(board.at(actual_pos).on_box.begin()+i, board.at(actual_pos).on_box.begin()+i+1);
 
     //elimino tutte le proprietà del giocatore
-    for (int j = 0; j < HEIGHT; j++){
-        for(int i = 0; i < WIDTH; i++){
-            //elimino eventuali case e alberghi nei terreni posseduti, e reimposto il terreno come libero
-            if (board[j][i].index == player_index){
-                if (board[j][i].on_box.at(3) == '*' || board[j][i].on_box.at(3) == '^')     board[j][i].on_box.erase(board[j][i].on_box.begin()+3, board[j][i].on_box.begin()+4);
-                board[j][i].index = -1;
-            }
-            //salto le celle della matrice che so essere vuote
-            if (j > 0 && j < HEIGHT - 1 && i >= 0 && i < WIDTH -1)  i = WIDTH - 2;
-        }
-    }
+    for (auto& i : board){
+
+        if (i.on_box.at(3) == '*' || i.on_box.at(3) == '^')     i.on_box.erase(i.on_box.begin()+3, i.on_box.begin()+4);
+        i.index = -1;
+    }   
     players.erase(players.begin() + player_index);
     players_number--;
 }
