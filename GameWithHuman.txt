@@ -1,0 +1,659 @@
+A seguire una partita di 100 round con giocatore umano
+
+
+
+	--- NUOVA PARTITA --- Thu Jan 11 14:07:11 2024
+
+Si tirano i dadi per stabilire l'ordine di gioco
+HumanPlayer (1) tira i dadi: 2
+CPUPlayer (2) tira i dadi: 9
+CPUPlayer (3) tira i dadi: 11
+CPUPlayer (4) tira i dadi: 8
+
+Si gioca nell'ordine: CPUPlayer (3), CPUPlayer (2), CPUPlayer (4), HumanPlayer (1)
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 9
+CPUPlayer (3) è arrivato nella casella C8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (2) è arrivato nella casella A5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) è arrivato nella casella A8
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella B8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 6 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella H6
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 5
+CPUPlayer (2) è arrivato nella casella C8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 9
+CPUPlayer (4) è arrivato nella casella H6
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) compra il terreno per 6 fiorini
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 6
+HumanPlayer (1) è arrivato nella casella H8
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 10
+CPUPlayer (3) è arrivato nella casella C1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) è arrivato nella casella H5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) è arrivato nella casella G1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 9
+HumanPlayer (1) è arrivato nella casella F1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 6 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 3
+CPUPlayer (3) passa per il via e ritira 20 fiorini
+CPUPlayer (3) è arrivato nella casella A2
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (2) è arrivato nella casella H1
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 12
+CPUPlayer (4) passa per il via e ritira 20 fiorini
+CPUPlayer (4) è arrivato nella casella A7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 10
+HumanPlayer (1) passa per il via e ritira 20 fiorini
+HumanPlayer (1) è arrivato nella casella A6
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 6 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella B8
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) passa per il via e ritira 20 fiorini
+CPUPlayer (2) è arrivato nella casella A2
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 10 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) è arrivato nella casella F8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 4
+HumanPlayer (1) è arrivato nella casella C8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 6 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 2
+CPUPlayer (3) è arrivato nella casella D8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) è arrivato nella casella C8
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 10
+CPUPlayer (4) è arrivato nella casella G1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 3
+HumanPlayer (1) è arrivato nella casella F8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 6
+CPUPlayer (3) è arrivato nella casella H6
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 3
+CPUPlayer (2) è arrivato nella casella F8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) passa per il via e ritira 20 fiorini
+CPUPlayer (4) è arrivato nella casella A2
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella H2
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 20 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella F1
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 5
+CPUPlayer (2) è arrivato nella casella H5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 10 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) è arrivato nella casella A8
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 10
+HumanPlayer (1) passa per il via e ritira 20 fiorini
+HumanPlayer (1) è arrivato nella casella A3
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 10 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 9
+CPUPlayer (3) passa per il via e ritira 20 fiorini
+CPUPlayer (3) è arrivato nella casella A5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 10
+CPUPlayer (2) è arrivato nella casella B1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 10 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 10
+CPUPlayer (4) è arrivato nella casella H5
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 7
+HumanPlayer (1) è arrivato nella casella C8
+HumanPlayer (1) possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa 
+HumanPlayer (1) compra una casa per 3 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (3) è arrivato nella casella F8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) passa per il via e ritira 20 fiorini
+CPUPlayer (2) è arrivato nella casella A8
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) è arrivato nella casella E1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 10
+HumanPlayer (1) è arrivato nella casella H3
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (3) è arrivato nella casella H2
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 7
+CPUPlayer (2) è arrivato nella casella H8
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 3
+CPUPlayer (4) è arrivato nella casella B1
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella B1
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 5
+CPUPlayer (3) è arrivato nella casella D1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (2) è arrivato nella casella H4
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) passa per il via e ritira 20 fiorini
+CPUPlayer (4) è arrivato nella casella A7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) passa per il via e ritira 20 fiorini
+HumanPlayer (1) è arrivato nella casella A8
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) passa per il via e ritira 20 fiorini
+CPUPlayer (3) è arrivato nella casella A5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 9
+CPUPlayer (2) è arrivato nella casella B1
+CPUPlayer (2) possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa 
+CPUPlayer (2) non investe in una casa 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 11
+CPUPlayer (4) è arrivato nella casella H5
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 11
+HumanPlayer (1) è arrivato nella casella H4
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 10 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella E8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 7
+CPUPlayer (2) passa per il via e ritira 20 fiorini
+CPUPlayer (2) è arrivato nella casella A7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 10 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 4
+CPUPlayer (4) è arrivato nella casella H1
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella C1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 3
+CPUPlayer (3) è arrivato nella casella H8
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 10
+CPUPlayer (2) è arrivato nella casella H6
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 8
+CPUPlayer (4) passa per il via e ritira 20 fiorini
+CPUPlayer (4) è arrivato nella casella A2
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 4
+HumanPlayer (1) passa per il via e ritira 20 fiorini
+HumanPlayer (1) è arrivato nella casella A3
+HumanPlayer (1) possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa 
+HumanPlayer (1) compra una casa per 5 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella H1
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 3
+CPUPlayer (2) è arrivato nella casella H3
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) compra il terreno per 10 fiorini
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 3
+CPUPlayer (4) è arrivato nella casella A5
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) compra il terreno per 20 fiorini
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 11
+HumanPlayer (1) è arrivato nella casella G8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) passa per il via e ritira 20 fiorini
+CPUPlayer (3) è arrivato nella casella A1
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (2) è arrivato nella casella F1
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 5
+CPUPlayer (4) è arrivato nella casella C8
+CPUPlayer (4) paga 2 fiorini a HumanPlayer (1) per il pernottamento in casa
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 6
+HumanPlayer (1) è arrivato nella casella H3
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (3) è arrivato nella casella B8
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 9
+CPUPlayer (2) passa per il via e ritira 20 fiorini
+CPUPlayer (2) è arrivato nella casella A5
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 9
+CPUPlayer (4) è arrivato nella casella H4
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 4
+HumanPlayer (1) è arrivato nella casella F1
+HumanPlayer (1) possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa 
+HumanPlayer (1) compra una casa per 3 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 7
+CPUPlayer (3) è arrivato nella casella H7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 9
+CPUPlayer (2) è arrivato nella casella G8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 9
+CPUPlayer (4) è arrivato nella casella B1
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) passa per il via e ritira 20 fiorini
+HumanPlayer (1) è arrivato nella casella A4
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) compra il terreno per 20 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 12
+CPUPlayer (3) è arrivato nella casella B1
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 7
+CPUPlayer (2) è arrivato nella casella H2
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 12
+CPUPlayer (4) passa per il via e ritira 20 fiorini
+CPUPlayer (4) è arrivato nella casella E8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella E8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 5
+CPUPlayer (3) passa per il via e ritira 20 fiorini
+CPUPlayer (3) è arrivato nella casella A5
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 10
+CPUPlayer (2) passa per il via e ritira 20 fiorini
+CPUPlayer (2) è arrivato nella casella A3
+CPUPlayer (2) paga 4 fiorini a HumanPlayer (1) per il pernottamento in casa
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 7
+CPUPlayer (4) è arrivato nella casella H4
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 7
+HumanPlayer (1) è arrivato nella casella H4
+HumanPlayer (1) possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa 
+HumanPlayer (1) compra una casa per 5 fiorini
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 11
+CPUPlayer (3) è arrivato nella casella H7
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) è arrivato nella casella D8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) è arrivato nella casella E1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) non compra il terreno 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) è arrivato nella casella C1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 5
+CPUPlayer (3) è arrivato nella casella H2
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 8
+CPUPlayer (2) è arrivato nella casella H4
+CPUPlayer (2) paga 4 fiorini a HumanPlayer (1) per il pernottamento in casa
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) passa per il via e ritira 20 fiorini
+CPUPlayer (4) è arrivato nella casella A3
+CPUPlayer (4) paga 4 fiorini a HumanPlayer (1) per il pernottamento in casa
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 8
+HumanPlayer (1) passa per il via e ritira 20 fiorini
+HumanPlayer (1) è arrivato nella casella A7
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 5
+CPUPlayer (3) è arrivato nella casella D1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (3) non compra il terreno 
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 4
+CPUPlayer (2) è arrivato nella casella G1
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (2) non compra il terreno 
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 8
+CPUPlayer (4) è arrivato nella casella D8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+CPUPlayer (4) compra il terreno per 6 fiorini
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 6
+HumanPlayer (1) è arrivato nella casella F8
+Il terreno è libero, procedo con verifiche per l'eventuale acquisto
+HumanPlayer (1) non compra il terreno 
+HumanPlayer (1) termina il turno
+
+È il turno di CPUPlayer (3)
+CPUPlayer (3) tira i dadi: 8
+CPUPlayer (3) passa per il via e ritira 20 fiorini
+CPUPlayer (3) è arrivato nella casella A6
+CPUPlayer (3) termina il turno
+
+È il turno di CPUPlayer (2)
+CPUPlayer (2) tira i dadi: 6
+CPUPlayer (2) passa per il via e ritira 20 fiorini
+CPUPlayer (2) è arrivato nella casella A1
+CPUPlayer (2) termina il turno
+
+È il turno di CPUPlayer (4)
+CPUPlayer (4) tira i dadi: 6
+CPUPlayer (4) è arrivato nella casella H6
+CPUPlayer (4) possiede il terreno, procedo con verifiche per l'eventuale acquisto di una casa 
+CPUPlayer (4) non investe in una casa 
+CPUPlayer (4) termina il turno
+
+È il turno di HumanPlayer (1)
+HumanPlayer (1) tira i dadi: 7
+HumanPlayer (1) è arrivato nella casella H3
+HumanPlayer (1) termina il turno
+
+Raggiunto il limite di turni. Vince, con 220 fiorini: CPUPlayer (3)

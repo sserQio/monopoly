@@ -1,3 +1,5 @@
+//Autore e matricola: Favretto Mattia, 2066594
+
 #ifndef BOARD_H
 #define BOARD_H
 
