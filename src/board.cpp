@@ -733,6 +733,6 @@ std::string to_string(Board::rows c){
         case Board::rows::Z : return "Z";
     }
 
-    // return 0; è corretto? su taliercio2020 da un warning per questa roba... 
+    return "";
 }
 
