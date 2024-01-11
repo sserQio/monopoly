@@ -1,3 +1,4 @@
+//Autore e matricola: Favretto Mattia, 2066594
 
 #include "../include/board.h"
 #include "../include/player.h"
@@ -50,7 +51,6 @@ void Board::fill_board(){
         //imposto (pseudo-)randomicamente le caselle nelle varie tipologie
         else {
             int t = rand()%3;
-            std::cout << t << " con " << n_economy << " " << n_standard << " " << n_luxurious << "\n";
             if (t == 0 && n_economy > 0){
                 board[x].on_box = "| " + box_types[t] + " |"; 
                 n_economy--;
@@ -399,7 +399,7 @@ bool Board::next(){
 
             //se rimuovo da un angolo, per mantenere la lunghezza corretta devo aggiungere uno spazio 
             if (board.at(actual_pos).on_box[2] == ' '){
-                board.at(actual_pos).on_box += "  ";
+                board.at(actual_pos).on_box.insert(2, " ");
             }
         }
     }
@@ -419,11 +419,13 @@ bool Board::next(){
     if (turn_count < players_number)    player.set_budget(prev_budget);
 
     actual_pos = convert_pos(player.get_pos());
+
     //aggiungo il player nel tabellone
+
     n = board.at(actual_pos).on_box.length(); //riutilizzo n perché il valore del lancio non serve più
     //elimino i caratteri " |"
     board.at(actual_pos).on_box = board.at(actual_pos).on_box.substr(0, n-2);
-    //se è un angolo    
+    //se è un angolo vuoto   
     if (board.at(actual_pos).on_box[2] == ' ')   board.at(actual_pos).on_box.erase(board.at(actual_pos).on_box.end()-1);
     board.at(actual_pos).on_box += player_index + " |";
 
@@ -577,8 +579,8 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << " compra un hotel per " << economic_hotel << "fiorini" <<"\n"; 
-                    std::cout << name << " compra un hotel per " << economic_hotel << "fiorini" <<"\n";
+                    output_file << name << " compra un hotel per " << economic_hotel << " fiorini" <<"\n"; 
+                    std::cout << name << " compra un hotel per " << economic_hotel << " fiorini" <<"\n";
 
                     //sostituisco la casa con l'albergo nel tabellone
                     board.at(actual_pos).on_box.at(3) = '^';
@@ -590,8 +592,8 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << " compra un hotel per " << standard_hotel << "fiorini" <<"\n"; 
-                    std::cout << name << " compra un hotel per " << standard_hotel << "fiorini" <<"\n";
+                    output_file << name << " compra un hotel per " << standard_hotel << " fiorini" <<"\n"; 
+                    std::cout << name << " compra un hotel per " << standard_hotel << " fiorini" <<"\n";
 
                     //sostituisco la casa con l'albergo nel tabellone
                     board.at(actual_pos).on_box.at(3) = '^';
@@ -603,8 +605,8 @@ bool Board::next(){
                 if (done == Player::purchase::DONE){
 
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    output_file << name << " compra un hotel per " << luxurious_hotel << "fiorini" <<"\n"; 
-                    std::cout << name << " compra un hotel per " << luxurious_hotel << "fiorini" <<"\n";
+                    output_file << name << " compra un hotel per " << luxurious_hotel << " fiorini" <<"\n"; 
+                    std::cout << name << " compra un hotel per " << luxurious_hotel << " fiorini" <<"\n";
 
                     //sostituisco la casa con l'albergo nel tabellone
                     board.at(actual_pos).on_box.at(3) = '^';
@@ -666,8 +668,10 @@ bool Board::next(){
         }
     }
 
-    //ripropongo il menù
-    if (interaction && turn == board.at(actual_pos).index){
+    //ripropongo il menù (if/else necessari per il corretto utilizzo di cin.ignore dato che voglio permettere l'utilizzo di [ENTER])
+    if (interaction && (board.at(actual_pos).index == -1 || board.at(actual_pos).index == turn) 
+            && board.at(actual_pos).on_box.substr(2,1) != name.substr(name.length() - 2, 1) && board.at(actual_pos).on_box[2]!= 'P'){
+        
         std::cin.ignore();
         show_options();
     }
