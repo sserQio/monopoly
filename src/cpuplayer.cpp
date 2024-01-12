@@ -4,7 +4,8 @@
 //   ---  OVERRIDE VIRTUAL FUNCTIONS  ---
 
 Player::purchase CPUPlayer::buy_land(int cost){
-    srand(time(0));
+    //srand(time(0)) delego a board l'inizializzazione del seed per non inficiare la (pseudo) randomicità
+
     int i = rand()%4;
  
     if (i == 0) return Player::buy_land(cost);
@@ -13,7 +14,6 @@ Player::purchase CPUPlayer::buy_land(int cost){
 
 
 Player::purchase CPUPlayer::buy_house(int cost){
-    srand(time(0));
     int i = rand()%4;
  
     if (i == 0) return Player::buy_house(cost);
@@ -22,7 +22,6 @@ Player::purchase CPUPlayer::buy_house(int cost){
 
 
 Player::purchase CPUPlayer::buy_hotel(int cost){
-    srand(time(0));
     int i = rand()%4;
  
     if (i == 0) return Player::buy_hotel(cost);

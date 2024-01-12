@@ -5,6 +5,8 @@
 //   ---  FUNZIONI DI GIOCO  ---
 
 int Player::throw_dice(){
+    //delego a board (o al main se il giocatore non fosse utilizzato associato ad una board)
+    //l'inizializzazione del seed così da non inficiare la randomicità se chiamata più volte la funzione
     return ((rand()%6)+1 + (rand()%6)+1);
 }
 
