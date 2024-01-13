@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmonopoly.a CMakeFiles/monopoly.dir/src/board.cpp.o CMakeFiles/monopoly.dir/src/player.cpp.o CMakeFiles/monopoly.dir/src/cpuplayer.cpp.o CMakeFiles/monopoly.dir/src/humanplayer.cpp.o
-/usr/bin/ranlib libmonopoly.a

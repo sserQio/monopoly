@@ -408,7 +408,7 @@ bool Board::next(){
     int prev_budget = player.get_budget();
     player.move(*this, n);
 
-    if (player.get_budget() == prev_budget + through_start && turn_count >= players_number){
+    if (player.get_budget() == prev_budget + through_start){
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         output_file << name << " passa per il via e ritira " << through_start << " fiorini" <<"\n";
@@ -416,7 +416,6 @@ bool Board::next(){
     }
     //Alla prima mossa, silenziosamente i giocatori acquisicono 20 fiorini (per come è strutturata la move)
     //quindi li rimuovo
-    if (turn_count < players_number)    player.set_budget(prev_budget);
 
     actual_pos = convert_pos(player.get_pos());
 

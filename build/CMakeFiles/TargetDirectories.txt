@@ -1,4 +1,0 @@
-/Users/sergio/Documents/Coding/monopoly/build/CMakeFiles/monopoly.dir
-/Users/sergio/Documents/Coding/monopoly/build/CMakeFiles/monopolyTester.dir
-/Users/sergio/Documents/Coding/monopoly/build/CMakeFiles/edit_cache.dir
-/Users/sergio/Documents/Coding/monopoly/build/CMakeFiles/rebuild_cache.dir
