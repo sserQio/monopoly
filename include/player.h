@@ -1,3 +1,5 @@
+// Autore e Matricola: Alberto Barbieri, 2066682
+
 #ifndef PLAYER_H
 #define PLAYER_H
 

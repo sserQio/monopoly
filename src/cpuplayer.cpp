@@ -1,3 +1,5 @@
+// Autore e Matricola: Alberto Barbieri, 2066682
+
 #include "../include/cpuplayer.h"
 
 

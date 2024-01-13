@@ -1,3 +1,5 @@
+// Autore e Matricola: Sergio Petenazzo, 2066693
+
 #include "../src/board.cpp"
 #include "../src/cpuplayer.cpp"
 #include "../src/humanplayer.cpp"

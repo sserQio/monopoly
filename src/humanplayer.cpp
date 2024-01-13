@@ -1,3 +1,5 @@
+// Autore e Matricola: Sergio Petenazzo, 2066693
+
 #include "../include/humanplayer.h"
 
 //   ---  FUNZIONI AUSILIARIE  ---

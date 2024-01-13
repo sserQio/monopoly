@@ -1,3 +1,5 @@
+// Autore e Matricola: Sergio Petenazzo, 2066693
+
 #ifndef HUMANPLAYER_H
 #define HUMANPLAYER_H
 
